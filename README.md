@@ -17,6 +17,10 @@ Then run `01_data_collection.ipynb` top to bottom. It downloads the data into `d
 | `src/data_loading.py` | Reusable loaders and feature functions |
 | `data.ipynb` | Earlier API scratch notebook |
 
+[View project code](https://github.com/rishimaroju25/RGBFS/blob/main/Group_Project.ipynb)
+
 ## Data sources
 * FRED: STLFSI4, NFCI, VIXCLS, BAMLH0A0HYM2, T10Y2Y
 * Yahoo Finance (via `yfinance`): SPY, XLB, XLE, XLF, XLI, XLK, XLP, XLU, XLV, XLY
+
+
