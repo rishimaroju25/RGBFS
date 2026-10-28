@@ -35,12 +35,23 @@ PROCESSED_DIR = ROOT / "data" / "processed"
 EMPTY_LOG = ROOT / "data" / "raw" / "prices_empty.csv"
 
 START = "2005-01-01"
+MIN_ROWS = 20  # a cached ticker with fewer rows than this is treated as a broken download
 BENCHMARKS = ["^GSPC", "SPY"]  # index level and the ETF; used for EDA comparisons
 
 
 def _cache_path(ticker: str) -> Path:
     safe = ticker.replace("^", "IDX_").replace("/", "_")
     return RAW_PRICE_DIR / f"{safe}.parquet"
+
+
+def _cached_rows(ticker: str) -> int:
+    """Number of rows in a ticker's cache file (0 if it does not exist)."""
+    p = _cache_path(ticker)
+    if not p.exists():
+        return 0
+    import pyarrow.parquet as pq
+
+    return pq.ParquetFile(p).metadata.num_rows
 
 
 def _read_empty_log() -> set[str]:
@@ -93,6 +104,10 @@ def download_prices(
     Yahoo rate-limits a batch, yfinance can return empty columns instead of
     raising an error. Without the retry, healthy tickers were logged as "no
     data" and skipped on every later run.
+
+    Cached files with fewer than MIN_ROWS rows are downloaded again: some
+    tickers in the first download (for example AVB, EQR, EA) came back with a
+    single day of prices, which made long-time members look unpriced.
     """
     if downloader is None:
         import yfinance as yf
@@ -102,8 +117,14 @@ def download_prices(
     RAW_PRICE_DIR.mkdir(parents=True, exist_ok=True)
     empty = set() if retry_empty else _read_empty_log()
     old_empty = _read_empty_log()
+    short = [t for t in tickers if 0 < _cached_rows(t) < MIN_ROWS]
+    for t in short:
+        _cache_path(t).unlink()
     todo = [t for t in tickers if not _cache_path(t).exists() and t not in empty]
     print(f"{len(tickers)} tickers: {len(tickers) - len(todo)} already done, {len(todo)} to download")
+    if short:
+        print(f"  re-downloading {len(short)} tickers whose cached prices had under {MIN_ROWS} rows: "
+              + ", ".join(short[:20]) + (" ..." if len(short) > 20 else ""))
 
     new_empty = []
     n_saved = 0
@@ -164,8 +185,12 @@ def download_prices(
     if still_empty or EMPTY_LOG.exists():
         pd.DataFrame({"ticker": sorted(still_empty)}).to_csv(EMPTY_LOG, index=False)
     recovered = len(old_empty - still_empty)
+    still_short = [t for t in tickers if 0 < _cached_rows(t) < MIN_ROWS]
+    if still_short:
+        print(f"  still under {MIN_ROWS} rows after download (check by hand): {', '.join(still_short)}")
     return {"requested": len(tickers), "downloaded": n_saved, "empty_new": len(new_empty),
-            "empty_total": len(still_empty), "recovered_from_empty_log": recovered}
+            "empty_total": len(still_empty), "recovered_from_empty_log": recovered,
+            "short_redownloaded": len(short), "still_short": len(still_short)}
 
 
 def load_cached(tickers: list[str]) -> dict[str, pd.DataFrame]:
