@@ -1,6 +1,6 @@
 # Proposal: stock universe and date range
 
-**Owner:** Rishi · **Status:** proposed, needs team agreement (Week 1)
+**Owner:** Rishi · **Status:** adopted for Week 1 (marked done in the team tracker, 2026-10-26). Raise objections at the next check-in.
 
 ## Proposal
 
@@ -28,7 +28,7 @@ from what investors actually held in 2005 to 2009.
 
 ## Why 2005 onward
 
-* It covers all four EDA periods: 2008 (Rishi), 2011 (Brandon), 2020 (Grace), 2022 (Fatima).
+* It covers all four EDA periods: 2008 (Rishi), 2011 (Salah), 2020 (Grace), 2022 (Fatima).
 * Our longest planned rolling window is 250 trading days (absorption ratio,
   following Kritzman et al., 2011). Starting in January 2005, a 250-day window
   is full by early 2006, more than a year before stress began building in mid

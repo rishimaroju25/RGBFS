@@ -21,7 +21,9 @@ On data from 2005-01-03 to 2026-10-26 this gives **13 episodes** covering 11.5% 
 
 **A fixed 25% level, not a percentile.** A percentile of the full sample changes every time we add data, which would move past labels. A fixed level does not. For scale, 25% is about twice the 2005 to 2026 median (12.9%) and close to the 90th percentile (26.5%).
 
-**A centered window.** A trailing 20-day window starts every episode about **10 trading days late** (checked for all 13 episodes in Section 3 of the notebook). That delay would add roughly two weeks of fake lead time to every alert in Rishi's Week 6 lead-time test. The centered window removes that bias. For 2011 it starts the episode on 2011-07-25, the first trading day after the debt talks collapsed, instead of 2011-08-08.
+**A centered window, with both start dates reported.** A trailing 20-day window starts every episode about **10 trading days late** (checked for all 13 episodes in Section 3 of the notebook). That delay would add roughly two weeks of fake lead time to every alert in Rishi's Week 6 lead-time test. The centered window has the **opposite bias**: because it looks 10 days ahead, an episode can start up to 10 trading days *before* volatility actually rises. For example, the COVID-19 episode starts on 2020-02-14, which appears to be before the S&P 500's pre-crash high (believed to be 2020-02-19; check it in the `^GSPC` data before citing it). An alert during those days counts as "inside the episode" rather than as a lead, so the centered start makes measured lead time look **shorter** than it is.
+
+Neither start is "the" right one: the centered start is an early bound and the trailing start a late bound. `docs/stress_periods.csv` therefore has both (`start` and `start_trailing`, 9 to 10 trading days apart), and the Week 6 lead-time test should report lead time against both. For 2011 the bounds are 2011-07-25 (first trading day after the debt talks collapsed) and 2011-08-08 (first trading day after the downgrade).
 
 **Merge gap and minimum length.** These stop one crisis from splitting into many short episodes and remove one-week blips. Changing either one moves the count by only one episode (Section 3).
 
@@ -46,7 +48,8 @@ At 30% the rule drops the 2007, Bear Stearns, Feb 2018 and Feb–Mar 2022 episod
 
 ## Decisions needed from the team
 
-1. **Agree on the 25% threshold**, or pick 30% if we want only severe episodes. 25% gives Week 6 more episodes to measure lead time and false alarms on.
-2. **2022 as one episode or three?** The rule gives three (Feb–Mar, Apr–Jun, Sep–Nov). Keeping three is consistent with the rule; merging them would need a longer merge gap for every period.
-3. **2011 framing.** The rule labels 2011-07-25 to 2011-12-08 as one episode covering both the U.S. debt ceiling and downgrade and the euro-area debt crisis. The 2011 EDA notebook uses the same framing.
-4. **Benchmark validation.** Brandon's VIX download is marked done, but `data/processed/daily_panel.parquet` was not in the shared data. Once it is shared, rerun `notebooks/stress_labels.ipynb` to fill in the VIX/STLFSI4 check.
+1. **Agree to report lead time against both start dates** (centered and trailing), as described above.
+2. **Agree on the 25% threshold**, or pick 30% if we want only severe episodes. 25% gives Week 6 more episodes to measure lead time and false alarms on.
+3. **2022 as one episode or three?** The rule gives three (Feb–Mar, Apr–Jun, Sep–Nov). Keeping three is consistent with the rule; merging them would need a longer merge gap for every period.
+4. **2011 framing.** The rule labels 2011-07-25 to 2011-12-08 as one episode covering both the U.S. debt ceiling and downgrade and the euro-area debt crisis. The 2011 EDA notebook uses the same framing.
+5. **Benchmark validation.** `01_data_collection.ipynb` could not run before (its loader file was in the wrong folder; fixed). Once someone runs it and shares `data/processed/daily_panel.parquet`, rerun `notebooks/stress_labels.ipynb` to fill in the VIX/STLFSI4 check.

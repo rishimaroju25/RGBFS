@@ -36,15 +36,32 @@ Mutual and others) will have no prices. We do not hide this:
 * `coverage_by_day()` gives the share of index members we have prices for on
   each day. The 2008 EDA notebook plots it.
 
-**Results from our download** (fill in after running the script):
+**Results from our download** (Rishi's run, October 2026; rerun the script and update after the fixes below):
 
 | Measure | Value |
 |---|---|
-| Members since 2005 | |
-| Members with no Yahoo data | |
-| Share of member-days with a price | |
-| Lowest daily share priced (and date) | |
-| Share priced during Sep 2008 to Mar 2009 | |
+| Members since 2005 | 977 |
+| Share of member-days with a price, 2005 onward | 76.3% |
+| Share priced, 2007 to 2009 (2008 EDA) | about 61% |
+| Share priced during Sep 2008 to Mar 2009 | 61.8% |
+| Share priced, 2011 (2011 EDA) | 66.4% |
+| Members with no Yahoo data | rerun the script; it prints this |
+| Lowest daily share priced (and date) | rerun the script; it prints this |
+
+### 3b. Gaps we have fixed since the first download
+
+* **Renamed tickers.** The membership file stores each company under the symbol
+  it used on each date, but Yahoo keeps the full history under the company's
+  current symbol only (for example `ABC` is now `COR`). These showed up as
+  "no data" even though the company never left the index (found in the 2011
+  EDA). `TICKER_ALIASES` in `src/universe.py` maps old to current symbols and
+  the coverage report's `prices_from` column shows which ones were filled. Add
+  more as we find them.
+* **Rate-limited downloads.** When Yahoo rate-limits a batch, `yfinance` can
+  return empty columns instead of an error. The first version of the script
+  logged those tickers as permanently empty. It now retries each missing
+  ticker on its own first. To retry tickers logged by an earlier run:
+  `python scripts/download_sp500_prices.py --retry-empty`.
 
 ### 4. Treat our 2008 results as a likely understatement
 The missing firms are concentrated among those that failed, and failing

@@ -18,7 +18,11 @@ Why these choices (details in the doc):
 * A fixed 25% level instead of a sample percentile, so adding new data never
   changes past labels.
 * A centered window so episode start dates are not pushed late by a trailing
-  window, which would inflate measured alert lead time.
+  window, which would inflate measured alert lead time. The centered window
+  has the opposite bias: an episode can start up to 10 trading days BEFORE
+  volatility actually rises, which makes measured lead time look shorter.
+  `episode_table` therefore reports both start dates (`start` and
+  `start_trailing`); the Week 6 lead-time test should report both.
 
 LOOKAHEAD WARNING: labels deliberately use future returns (the centered
 window looks 10 days ahead). They are evaluation targets only. Never use
@@ -103,9 +107,20 @@ def daily_labels(prices: pd.Series, threshold: float = THRESHOLD, window: int = 
     return labels_from_flag(vol >= threshold, vol, merge_gap, min_length)
 
 
-def episode_table(labels: pd.DataFrame, prices: pd.Series) -> pd.DataFrame:
-    """One row per episode with dates, length and severity measures."""
+def episode_table(labels: pd.DataFrame, prices: pd.Series, with_trailing_start: bool = True) -> pd.DataFrame:
+    """One row per episode with dates, length and severity measures.
+
+    With `with_trailing_start`, also gives the start date of the overlapping
+    episode under a trailing 20-day window (same threshold and merge rules)
+    and the number of trading days between the two starts. The centered start
+    is the early bound and the trailing start the late bound for when the
+    episode "really" began.
+    """
     prices = prices.dropna()
+    trailing = None
+    if with_trailing_start:
+        trail_lab = daily_labels(prices, window=WINDOW - 1, centered=False)
+        trailing = episode_table(trail_lab, prices, with_trailing_start=False)
     peak_252 = prices.rolling(252, min_periods=1).max()
     drawdown = prices / peak_252 - 1
     rows = []
@@ -123,4 +138,19 @@ def episode_table(labels: pd.DataFrame, prices: pd.Series) -> pd.DataFrame:
             "trough_date": dd.idxmin().date(),
             "name": EPISODE_NAMES.get(str(s.date()), "unnamed: check and add a name"),
         })
-    return pd.DataFrame(rows).set_index("episode_id")
+    table = pd.DataFrame(rows).set_index("episode_id")
+    if trailing is not None and len(table):
+        t_start = pd.to_datetime(trailing["start"])
+        t_end = pd.to_datetime(trailing["end"])
+        starts, gaps = [], []
+        for s_, e_ in zip(pd.to_datetime(table["start"]), pd.to_datetime(table["end"])):
+            hit = t_start[(t_end >= s_) & (t_start <= e_)]
+            if len(hit):
+                starts.append(hit.iloc[0].date())
+                gaps.append(prices.index.get_loc(hit.iloc[0]) - prices.index.get_loc(s_))
+            else:
+                starts.append(None)
+                gaps.append(None)
+        table.insert(2, "start_trailing", starts)
+        table.insert(3, "days_between_starts", pd.array(gaps, dtype="Int64"))
+    return table
