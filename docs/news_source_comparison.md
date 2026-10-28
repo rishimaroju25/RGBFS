@@ -73,7 +73,7 @@ GDELT remains a potential historical news source, but its access restrictions an
 
 For the initial version of the Market Stress Early-Warning System, SEC EDGAR filings are recommended as the primary source of financial text data.
 
-The project successfully retrieved 20 SEC filings from five major technology companies during 2022 and extracted 13,217 text segments with no missing or empty text values.
+The first pass retrieved 2022 Form 10-K and 10-Q filings for five large technology companies (NVIDIA, Apple, Alphabet, Microsoft and Amazon) from EDGAR without access problems. Its counts were not final: Microsoft's paragraph extraction failed with 404 errors (the download URL used the filing agent's ID instead of Microsoft's), the Alphabet counts disagreed between steps, and the text still contained XBRL codes and cover-page checkboxes. Those issues are fixed in `src/sec_filings.py`; `notebooks/02_sec_filings.ipynb` reports the corrected filing and paragraph counts.
 
 SEC filings provide an accessible and reproducible starting point for financial text analysis.
 
