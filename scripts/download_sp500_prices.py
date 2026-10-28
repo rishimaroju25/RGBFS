@@ -4,6 +4,7 @@ Run from the repo root:
 
     python scripts/download_sp500_prices.py            # 2005-01-01 to today
     python scripts/download_sp500_prices.py --start 2005-01-01 --end 2026-10-23
+    python scripts/download_sp500_prices.py --retry-empty  # retry tickers logged as empty
 
 What it does
   1. Downloads the point-in-time S&P 500 membership file (fja05680/sp500) to
@@ -12,8 +13,9 @@ What it does
      was a member at any point in the date range, plus ^GSPC and SPY.
      Prices are cached per ticker in data/raw/prices/, so if the run stops
      (network error, rate limit) just run it again and it picks up where it
-     left off. Tickers Yahoo returns nothing for are listed in
-     data/raw/prices_empty.csv; delete that file to retry them.
+     left off. Each ticker missing from a batch is retried on its own before
+     it is listed in data/raw/prices_empty.csv; run with --retry-empty to try
+     those again.
   3. Writes data/processed/:
        sp500_close.parquet       adjusted close, dates x tickers
        sp500_volume.parquet      volume, dates x tickers
@@ -44,6 +46,8 @@ def main() -> None:
     ap.add_argument("--batch-size", type=int, default=50)
     ap.add_argument("--pause", type=float, default=2.0, help="seconds between batches")
     ap.add_argument("--refresh-membership", action="store_true", help="re-download the membership file")
+    ap.add_argument("--retry-empty", action="store_true",
+                    help="try again for tickers logged as empty on earlier runs (data/raw/prices_empty.csv)")
     args = ap.parse_args()
 
     changes = uni.load_membership_changes(refresh=args.refresh_membership)
@@ -55,8 +59,9 @@ def main() -> None:
     print(f"{len(tickers)} tickers were S&P 500 members at some point since {args.start}")
 
     summary = px.download_prices(
-        tickers + px.BENCHMARKS, start=args.start, end=args.end,
-        batch_size=args.batch_size, pause=args.pause,
+        tickers + px.BENCHMARKS + sorted(set(uni.TICKER_ALIASES.values()) - set(tickers)),
+        start=args.start, end=args.end, batch_size=args.batch_size, pause=args.pause,
+        retry_empty=args.retry_empty,
     )
     print("Download summary:", summary)
 
@@ -73,6 +78,9 @@ def main() -> None:
           f"on {cov['share_priced'].idxmin().date()}")
     print(f"Tickers to check for symbol reuse (more than one membership spell): "
           f"{int(report['check_ticker_reuse'].sum())}")
+    if report["prices_from"].notna().any():
+        print("Renamed tickers filled from their current symbol: "
+              + ", ".join(f"{o}->{n}" for o, n in report["prices_from"].dropna().items()))
 
 
 if __name__ == "__main__":

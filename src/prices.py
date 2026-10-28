@@ -81,11 +81,18 @@ def download_prices(
     pause: float = 2.0,
     max_retries: int = 3,
     downloader=None,
+    retry_empty: bool = False,
 ) -> dict:
     """Download and cache daily prices. `tickers` use S&P-style symbols (BRK.B).
 
     `downloader` defaults to `yfinance.download`; tests pass a stub.
+    `retry_empty=True` tries again for tickers logged as empty on earlier runs.
     Returns a summary dict with counts of cached, downloaded and empty tickers.
+
+    Why a ticker is retried on its own before being logged as empty: when
+    Yahoo rate-limits a batch, yfinance can return empty columns instead of
+    raising an error. Without the retry, healthy tickers were logged as "no
+    data" and skipped on every later run.
     """
     if downloader is None:
         import yfinance as yf
@@ -93,7 +100,8 @@ def download_prices(
         downloader = yf.download
 
     RAW_PRICE_DIR.mkdir(parents=True, exist_ok=True)
-    empty = _read_empty_log()
+    empty = set() if retry_empty else _read_empty_log()
+    old_empty = _read_empty_log()
     todo = [t for t in tickers if not _cache_path(t).exists() and t not in empty]
     print(f"{len(tickers)} tickers: {len(tickers) - len(todo)} already done, {len(todo)} to download")
 
@@ -125,6 +133,21 @@ def download_prices(
             print(f"  batch {i // batch_size + 1}: giving up for now; re-run the script to retry")
             continue
         frames = _split_download(raw, list(ymap))
+        missing = [yt for yt in ymap if yt not in frames]
+        if missing:
+            # Second chance, one ticker at a time, so a rate-limited batch
+            # does not get logged as permanently empty.
+            time.sleep(pause)
+            for yt in missing:
+                try:
+                    one = downloader(
+                        [yt], start=start, end=end, auto_adjust=True, actions=False,
+                        group_by="column", threads=False, progress=False, multi_level_index=True,
+                    )
+                    frames.update(_split_download(one, [yt]))
+                except Exception as exc:
+                    print(f"  {yt}: single retry failed ({exc!r})")
+                time.sleep(pause / 4)
         for yt, t in ymap.items():
             if yt in frames:
                 frames[yt].to_parquet(_cache_path(t))
@@ -135,11 +158,14 @@ def download_prices(
         print(f"  {done}/{len(todo)} processed ({n_saved} saved, {len(new_empty)} empty)")
         time.sleep(pause)
 
-    if new_empty:
-        log = pd.DataFrame({"ticker": sorted(empty | set(new_empty))})
-        log.to_csv(EMPTY_LOG, index=False)
+    # Rewrite the log: keep earlier empties that were not retried, drop any
+    # that now have prices, add the new ones.
+    still_empty = {t for t in old_empty if not _cache_path(t).exists()} | set(new_empty)
+    if still_empty or EMPTY_LOG.exists():
+        pd.DataFrame({"ticker": sorted(still_empty)}).to_csv(EMPTY_LOG, index=False)
+    recovered = len(old_empty - still_empty)
     return {"requested": len(tickers), "downloaded": n_saved, "empty_new": len(new_empty),
-            "empty_total": len(empty | set(new_empty))}
+            "empty_total": len(still_empty), "recovered_from_empty_log": recovered}
 
 
 def load_cached(tickers: list[str]) -> dict[str, pd.DataFrame]:
@@ -161,7 +187,16 @@ def assemble(changes: pd.DataFrame, start: str = START, end: str | None = None, 
     `membership` (or `masked_close`) to keep only member days.
     """
     tickers = uni.tickers_in_period(changes, start, end)
-    data = load_cached(tickers + BENCHMARKS)
+    data = load_cached(tickers + BENCHMARKS + sorted(set(uni.TICKER_ALIASES.values())))
+
+    # Renamed tickers: give the old symbol the current symbol's history. The
+    # membership mask keeps each symbol to its own member days, so the
+    # company is never counted twice on the same day.
+    aliased = {}
+    for old, new in uni.TICKER_ALIASES.items():
+        if old in tickers and old not in data and new in data:
+            data[old] = data[new]
+            aliased[old] = new
 
     if calendar_ticker in data:
         dates = data[calendar_ticker].index
@@ -196,6 +231,7 @@ def assemble(changes: pd.DataFrame, start: str = START, end: str | None = None, 
     gap = (report["first_price"] - report["first_member_day"]).dt.days
     report["late_start"] = (gap > 30) & ~report["no_data"]
     report["check_ticker_reuse"] = report["n_spells"] > 1
+    report["prices_from"] = pd.Series(aliased).reindex(report.index)
     report.index.name = "ticker"
     return close, volume, membership, report.sort_values("member_days", ascending=False)
 

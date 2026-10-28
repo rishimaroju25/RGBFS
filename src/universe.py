@@ -105,6 +105,25 @@ def membership_spells(changes: pd.DataFrame) -> pd.DataFrame:
     return spells
 
 
+# Renamed tickers. The membership file stores a company under the symbol it
+# used on each date, but Yahoo keeps the whole price history under the
+# company's CURRENT symbol only. So the old symbol downloads as empty even
+# though the company never left. Map old -> current symbol here and
+# `prices.assemble` fills the old symbol's member days from the current one.
+#
+# Entries were found in the 2011 EDA (notebooks/eda_2011.ipynb, Section 2):
+# the new symbols already download with full history. Add more after checking
+# them by hand: look for well-known companies in the coverage report's
+# `no_data` list, find their current symbol, and confirm Yahoo's history for
+# that symbol covers the old member days.
+TICKER_ALIASES = {
+    "BK": "BNY",    # Bank of New York Mellon
+    "ABC": "COR",   # AmerisourceBergen, now Cencora
+    "ANTM": "ELV",  # Anthem, now Elevance Health
+    "BLL": "BALL",  # Ball Corp
+}
+
+
 def to_yahoo(ticker: str) -> str:
     """Yahoo Finance uses '-' where the S&P list uses '.', e.g. BRK.B -> BRK-B."""
     return ticker.replace(".", "-")
