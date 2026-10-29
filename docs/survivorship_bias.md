@@ -36,17 +36,22 @@ Mutual and others) will have no prices. We do not hide this:
 * `coverage_by_day()` gives the share of index members we have prices for on
   each day. The 2008 EDA notebook plots it.
 
-**Results from our download** (Rishi's run, October 2026; rerun the script and update after the fixes below):
+**Results from our download** (Rishi's rerun on 2026-10-28 with `--retry-empty` and the renamed-ticker fix; the first run on 2026-10-26 gave 76.3% of member-days priced):
 
 | Measure | Value |
 |---|---|
 | Members since 2005 | 977 |
-| Share of member-days with a price, 2005 onward | 76.3% |
-| Share priced, 2007 to 2009 (2008 EDA) | about 61% |
-| Share priced during Sep 2008 to Mar 2009 | 61.8% |
-| Share priced, 2011 (2011 EDA) | 66.4% |
-| Members with no Yahoo data | rerun the script; it prints this |
-| Lowest daily share priced (and date) | rerun the script; it prints this |
+| Members with no Yahoo data while in the index | 342 |
+| Share of member-days with a price, 2005 onward | 77.1% |
+| Lowest daily share priced (and date) | 53.3% on 2005-01-03 |
+| Tickers flagged for possible symbol reuse (more than one membership spell) | 51 |
+| Share priced, 2007 to 2009 (2008 EDA) | 61.6% |
+| Share priced during Sep 2008 to Mar 2009 (2008 EDA) | 62.6% |
+| Share priced, 2011 (2011 EDA) | 67.2% |
+| Share priced, 2020 (2020 EDA) | 88.0% |
+| Share priced, 2022 (2022 EDA) | 92.3% |
+
+Coverage is lowest at the start of the sample because the earliest members are the ones most likely to have been acquired or to have failed since. Coverage rises over time (62% in 2008 to 92% in 2022) because the more recent the period, the fewer of its members have since disappeared from Yahoo.
 
 ### 3b. Gaps we have fixed since the first download
 
@@ -92,6 +97,7 @@ tickers that matter for our stress windows.
   move of a failed firm (often close to -100%) is not in Yahoo data. A
   survivorship-free source such as CRSP would fix this, but we do not
   currently have access to it.
+* **Symbols that lost their history recently.** Eight tickers (AVB, EA, EQR, LEG, PSKY, QRVO, SATS, WBD) return only their last few trading days from Yahoo, starting between 2026-07-29 and 2026-10-20, with both `yf.download` and `yf.Ticker().history` (checked 2026-10-28). This looks like Yahoo keeping only the final days of recently acquired, merged or delisted symbols; the corporate events have not been verified. They are long-time members, so they lower 2020 and 2022 coverage by about 1.6 percentage points (8 of roughly 500 members). Because any future delisting can erase a symbol's history the same way, **keep `data/raw/prices/` (the download cache) and share it on Google Drive** rather than re-downloading from scratch.
 * **Adjusted prices.** Yahoo's adjusted close is recomputed after each new
   split or dividend, so a re-download can change past values slightly. We
   record the download date in the README.

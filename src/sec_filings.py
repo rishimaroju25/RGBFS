@@ -157,8 +157,13 @@ def filing_paragraphs(html: str, min_words: int = 15) -> pd.DataFrame:
     Drops the inline-XBRL header, hidden elements, scripts, styles and tables,
     then keeps block-level text with at least `min_words` words.
     """
-    from bs4 import BeautifulSoup
+    import warnings
 
+    from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
+
+    # Inline-XBRL filings are XHTML; the HTML parser handles them fine, so
+    # silence bs4's warning about it (it printed once per filing).
+    warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
     soup = BeautifulSoup(html, "lxml")
     drop = soup.find_all(["script", "style", "table"])
     drop += [t for t in soup.find_all(True) if t.name.lower() == "ix:header" or _is_hidden(t)]
