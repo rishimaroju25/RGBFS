@@ -21,6 +21,10 @@ seaborn>=0.13
 scipy>=1.11
 scikit-learn>=1.3
 
+# Text sentiment (FinBERT, notebooks/03_sentiment_prototype.ipynb)
+transformers>=4.40
+torch>=2.2
+
 # Running notebooks
 ipykernel>=6.0
 nbconvert>=7.0

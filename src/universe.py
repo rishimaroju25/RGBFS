@@ -121,6 +121,16 @@ TICKER_ALIASES = {
     "ABC": "COR",   # AmerisourceBergen, now Cencora
     "ANTM": "ELV",  # Anthem, now Elevance Health
     "BLL": "BALL",  # Ball Corp
+    # Suggested by Grace in the 2020 EDA (members with no prices under the old symbol).
+    # After the next download, check the coverage report: `late_start` = True for one
+    # of these means Yahoo's history under the new symbol starts late, so remove it.
+    "FB": "META",   # Facebook, now Meta Platforms
+    "COG": "CTRA",  # Cabot Oil & Gas, now Coterra Energy
+    "FLT": "CPAY",  # FleetCor, now Corpay
+    "FBHS": "FBIN", # Fortune Brands Home & Security, now Fortune Brands Innovations
+    "HFC": "DINO",  # HollyFrontier, now HF Sinclair
+    "LB": "BBWI",   # L Brands, now Bath & Body Works
+    "NLOK": "GEN",  # NortonLifeLock, now Gen Digital
 }
 
 

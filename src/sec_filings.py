@@ -165,6 +165,17 @@ def filing_paragraphs(html: str, min_words: int = 15) -> pd.DataFrame:
     # silence bs4's warning about it (it printed once per filing).
     warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
     soup = BeautifulSoup(html, "lxml")
+    # Some filers (Amazon in 2022) put the "Item 1A. Risk Factors" headings inside
+    # small tables. Keep those as headings before tables are removed, or every
+    # paragraph stays tagged "front matter".
+    for table in soup.find_all("table"):
+        if table.decomposed:
+            continue
+        text = " ".join(table.get_text(" ", strip=True).split())
+        if ITEM_RE.match(text) and len(text.split()) <= 15:
+            heading = soup.new_tag("p")
+            heading.string = text
+            table.replace_with(heading)
     drop = soup.find_all(["script", "style", "table"])
     drop += [t for t in soup.find_all(True) if t.name.lower() == "ix:header" or _is_hidden(t)]
     for tag in drop:
