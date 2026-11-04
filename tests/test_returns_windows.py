@@ -143,3 +143,11 @@ def test_quality_report_lists_only_flagged_cells():
     res = run(frame(S=spike, N=np.linspace(50, 60, 12)), members(["S", "N"]))
     q = res.quality
     assert set(q["ticker"]) == {"S"} and set(q["reason"]) == {"spike_removed"} and len(q) == 2
+
+
+def test_multi_day_crisis_swing_is_kept():
+    # AIG-like: -45%, then +31%, +43% over two days. Real, must not be removed.
+    px = np.array([100, 101, 102, 56.1, 73.6, 105.3, 106, 107, 108, 109, 110, 111], float)
+    res = run(frame(A=px), members(["A"]))
+    assert res.returns["A"].iloc[3:6].notna().all()
+    assert res.summary["spike_removed"] == 0

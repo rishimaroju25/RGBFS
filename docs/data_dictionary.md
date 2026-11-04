@@ -41,7 +41,7 @@ From the repo root, in this order:
 1. **Member days only.** Returns are computed from the full price history, then kept only on days the stock was in the index. A stock's first day in the index has a real return (its price the day before joining is known).
 2. **No filling across gaps.** If yesterday's price is missing, today's return is NaN, not a multi-day return.
 3. **Stale prices:** 5 or more identical closes in a row on member days are removed (`stale_removed`).
-4. **Spikes:** a one-day move above 40% that comes back within 10% of its starting price within 3 trading days is a data error; both legs are removed (`spike_removed`). Large moves that do not reverse are kept (`large_move_kept`).
+4. **Spikes:** a one-day move above 40% that is back within 10% of its starting price on the **next** trading day is a data blip; both legs are removed (`spike_removed`). Slower reversals and moves that do not reverse are kept (`large_move_kept`). A 3-day version of this rule was tried first and wrongly removed AIG's real moves during its September 2008 bailout.
 5. **Repeated jumps:** a ticker with 3+ moves above 40% within a year is listed as `repeated_jumps_review` for a manual check (usually a reused symbol). Not removed automatically.
 6. **Overrides:** `docs/return_overrides.csv` (ticker, start, end, action, note) wins over every rule. Current entries: CPWR and EP dropped (bad prices found in the 2011 EDA), and the eight large 2020 and 2022 moves the team confirmed as real.
 

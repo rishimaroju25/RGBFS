@@ -14,11 +14,13 @@ What "clean" means here
    zero returns would make a stock look perfectly calm and pull
    correlations toward zero.
 4. **Price spikes are removed, real crashes are kept.** A one-day move above
-   40% is flagged. If the price returns to within 10% of its pre-jump level
-   within 3 trading days, it is a data spike (for example CPWR's +376% and
-   back in 2011) and those returns are set to NaN. Large moves that do not
-   reverse (OXY -52% on 2020-03-09) are real and kept. Every flag is listed
-   in the quality report so it can be checked by hand.
+   40% is flagged. If the price is back within 10% of its pre-jump level on
+   the very next trading day, it is a one-day data blip and both legs are
+   set to NaN. Anything slower is kept: real crisis stocks can swing hard
+   for days (AIG fell 45% and recovered over two days during its September
+   2008 bailout; a 3-day version of this rule wrongly removed that). Large
+   moves that do not reverse (OXY -52% on 2020-03-09) are kept. Every flag
+   is listed in the quality report so it can be checked by hand.
 5. **Repeated jumps are flagged for review.** A ticker with 3 or more
    flagged moves within a year usually has prices from a different security
    (a reused symbol), as CPWR and EP did in 2011. These are listed, not
@@ -31,10 +33,10 @@ What it cannot fix: firms Yahoo has no prices for (mostly failed or
 acquired firms) and the final "delisting" return of a failed firm, which is
 never in the data. See docs/survivorship_bias.md.
 
-Lookahead note: the spike rule looks up to 3 days ahead to decide whether a
+Lookahead note: the spike rule looks 1 day ahead to decide whether a
 past price was an error. That is data cleaning of the historical record,
 not a model feature, but a real-time system would only know about a spike
-3 days later. Keep this in mind for the Week 5 lookahead checklist.
+a day later. Keep this in mind for the Week 5 lookahead checklist.
 """
 
 from __future__ import annotations
@@ -50,7 +52,7 @@ PROCESSED_DIR = ROOT / "data" / "processed"
 OVERRIDES = ROOT / "docs" / "return_overrides.csv"
 
 JUMP = 0.40          # one-day absolute return that gets flagged
-REVERT_DAYS = 3      # look this many days ahead for a reversal
+REVERT_DAYS = 1      # a spike must reverse on the next trading day (3 days removed real AIG 2008 moves)
 REVERT_BAND = 0.10   # "reversed" = back within 10% of the pre-jump price
 REPEAT_JUMPS = 3     # flagged moves within REPEAT_WINDOW days that trigger a review flag
 REPEAT_WINDOW = 252
