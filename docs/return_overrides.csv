@@ -1,0 +1,14 @@
+# Team-checked decisions for src/returns.py. One row per ticker and date range.
+# action: drop = remove these member-day returns; keep = keep them even if a rule removed them.
+# end can be left blank for a single day. Add a note saying who checked it and why.
+ticker,start,end,action,note
+CPWR,2005-01-01,2026-12-31,drop,"Prices jump +100%/-90% repeatedly in 2011, so they do not match the index member (likely a reused symbol). Found by Salah in the 2011 EDA; excluded there. Verify before final results."
+EP,2005-01-01,2026-12-31,drop,"Repeated one-day jumps of +40% to +83% in 2011; likely a reused symbol. Found by Salah in the 2011 EDA; excluded there. Verify before final results."
+OXY,2020-03-09,,keep,"Real move (oil price crash day). Confirmed by the team 2026-10-28."
+APA,2020-03-09,,keep,"Real move (oil price crash day). Confirmed by the team 2026-10-28."
+FANG,2020-03-09,,keep,"Real move (oil price crash day). Confirmed by the team 2026-10-28."
+NCLH,2020-03-24,,keep,"Real move. Confirmed by the team 2026-10-28."
+DXC,2020-03-24,,keep,"Real move. Confirmed by the team 2026-10-28."
+AAL,2020-06-04,,keep,"Real move. Confirmed by the team 2026-10-28."
+BIIB,2020-11-04,,keep,"Real move. Confirmed by the team 2026-10-28."
+EPAM,2022-02-28,,keep,"Real move. Confirmed by the team 2026-10-28."

@@ -42,6 +42,8 @@ The data is too large for GitHub (`data/` is gitignored). Get it one of two ways
 | `src/data_loading.py` | FRED series, sector ETF prices, daily panel, first network features |
 | `src/stress_labels.py` | Stress-period labels (rule in `docs/stress_label_rule.md`) |
 | `src/sec_filings.py` | SEC EDGAR 10-K/10-Q download and paragraph cleaning |
+| `src/returns.py` | Clean daily returns: member days only, no filling across gaps, stale prices and spikes removed |
+| `src/windows.py` | Shared trailing rolling windows: correlation matrix per window, connectedness, any custom feature |
 | `scripts/download_sp500_prices.py` | Runs the price download end to end |
 | `01_data_collection.ipynb` | FRED + ETF panel, preliminary label, first-look features |
 | `notebooks/eda_2008.ipynb` | EDA: 2008 financial crisis (Rishi) |
@@ -50,8 +52,20 @@ The data is too large for GitHub (`data/` is gitignored). Get it one of two ways
 | `notebooks/eda_2022.ipynb` | EDA: 2022 rate-hike bear market (Fatima) |
 | `notebooks/stress_labels.ipynb` | Builds the stress episode table (Salah) |
 | `notebooks/02_sec_filings.ipynb` | SEC filing text for sentiment (Fatima) |
-| `docs/` | Decisions and write-ups: universe and dates, survivorship bias, stress label rule, stress periods table, text source comparison |
+| `notebooks/03_sentiment_prototype.ipynb` | FinBERT sentiment prototype (Fatima) |
+| `notebooks/04_returns_and_windows.ipynb` | Builds the clean returns and connectedness features (Rishi) |
+| `tests/` | Tests for returns and windows: `python -m pytest tests -q` |
+| `docs/` | Decisions and write-ups. **Start with `docs/data_dictionary.md`**: every data file, its columns, how it is built and its known gaps. `docs/return_overrides.csv` holds team-checked keep/drop decisions for unusual returns |
 | `Group_Project.ipynb`, root `*.csv` | Brandon's benchmark downloads (`*_daily.csv` are the daily files) |
+
+**For feature work, start from the clean returns, not the raw prices:**
+
+```python
+from src import returns as rt, windows as wn
+rets = rt.load_returns()                          # needs notebooks/04_returns_and_windows.ipynb run once
+corr = wn.correlation_at(rets, "2008-10-31")      # one 60-day correlation matrix
+conn = wn.connectedness(rets)                     # avg corr, PC1 share, absorption ratio over time
+```
 
 All four EDA notebooks have the same sections (coverage, market overview, VIX/STLFSI4, dispersion and breadth, connectedness, timing table, robustness), so the stress periods can be compared directly.
 
