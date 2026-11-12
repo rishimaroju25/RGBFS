@@ -44,6 +44,7 @@ The data is too large for GitHub (`data/` is gitignored). Get it one of two ways
 | `src/sec_filings.py` | SEC EDGAR 10-K/10-Q download and paragraph cleaning |
 | `src/returns.py` | Clean daily returns: member days only, no filling across gaps, stale prices and spikes removed |
 | `src/windows.py` | Shared trailing rolling windows: correlation matrix per window, connectedness, any custom feature |
+| `src/clustering.py` | Network and community settings (market-adjusted, fixed density, Louvain), cluster stability and sector agreement |
 | `scripts/download_sp500_prices.py` | Runs the price download end to end |
 | `01_data_collection.ipynb` | FRED + ETF panel, preliminary label, first-look features |
 | `notebooks/eda_2008.ipynb` | EDA: 2008 financial crisis (Rishi) |
@@ -54,7 +55,11 @@ The data is too large for GitHub (`data/` is gitignored). Get it one of two ways
 | `notebooks/02_sec_filings.ipynb` | SEC filing text for sentiment (Fatima) |
 | `notebooks/03_sentiment_prototype.ipynb` | FinBERT sentiment prototype (Fatima) |
 | `notebooks/04_returns_and_windows.ipynb` | Builds the clean returns and connectedness features (Rishi) |
-| `tests/` | Tests for returns and windows: `python -m pytest tests -q` |
+| `05_network_analysis.ipynb` | Network prototype for one window (Brandon) |
+| `notebooks/06_clustering_analysis.ipynb`, `07_clustering_over_time.ipynb` | Community detection for one window and over the full history (Grace) |
+| `notebooks/08_cluster_stability.ipynb` | Cluster stability and choice of clustering settings (Rishi) |
+| `notebooks/sentiment_spot_check.ipynb` | Hand check of FinBERT labels (Salah) |
+| `tests/` | Tests for returns, windows, clustering and SEC parsing: `python -m pytest tests -q` |
 | `docs/` | Decisions and write-ups. **Start with `docs/data_dictionary.md`**: every data file, its columns, how it is built and its known gaps. `docs/return_overrides.csv` holds team-checked keep/drop decisions for unusual returns |
 | `Group_Project.ipynb`, root `*.csv` | Brandon's benchmark downloads (`*_daily.csv` are the daily files) |
 

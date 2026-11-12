@@ -60,6 +60,15 @@ Rules: windows are **trailing** (a value dated *t* uses days up to *t* only); a 
 
 Saved feature: `data/processed/features/connectedness_60d.parquet` (60-day windows every 5 trading days, 2005 onward).
 
+## Clusters (`src/clustering.py`, Week 3)
+
+| File | Contents |
+|---|---|
+| `features/clusters_market_adjusted_20d.parquet` | Every 20 trading days: n_stocks, n_nodes, n_edges, density, n_communities, modularity, largest_share, sector_ari, stability (ARI vs the previous window). Built from residual correlations after removing the equal-weighted market move, strongest 5% of positive links, weighted Louvain (seed 2302) |
+| `features/cluster_memberships_market_adjusted_20d.parquet` | date, ticker, community |
+
+Built by `notebooks/08_cluster_stability.ipynb`, which also compares this setting with Grace's original one.
+
 ## Market and stress series
 
 | File | Contents |

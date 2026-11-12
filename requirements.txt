@@ -20,6 +20,7 @@ matplotlib>=3.7
 seaborn>=0.13
 scipy>=1.11
 scikit-learn>=1.3
+networkx>=3.0
 
 # Text sentiment (FinBERT, notebooks/03_sentiment_prototype.ipynb)
 transformers>=4.40
