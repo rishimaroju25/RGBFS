@@ -1,5 +1,6 @@
 ticker,community
 A,1
+ABC,1
 ABT,1
 ADI,1
 ADM,1
@@ -12,6 +13,7 @@ AIZ,1
 ALL,1
 AMGN,1
 AMT,1
+ANTM,1
 APA,1
 APD,1
 ASH,1
@@ -21,6 +23,7 @@ BAX,1
 BDX,1
 BF.B,1
 BIIB,1
+BLL,1
 BMY,1
 BSX,1
 CAG,1
@@ -179,6 +182,7 @@ BAC,2
 BBT,2
 BBY,2
 BEN,2
+BK,2
 BXP,2
 C,2
 CB,2
