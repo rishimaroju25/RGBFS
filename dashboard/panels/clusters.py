@@ -2,7 +2,14 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from dashboard.compat import full_width
+try:
+    from dashboard.compat import full_width
+except ImportError:  # loaded by file path, or another "dashboard" package is installed
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("rgbfs_compat", Path(__file__).resolve().parents[1] / "compat.py")
+    _compat = _ilu.module_from_spec(_spec)
+    _spec.loader.exec_module(_compat)
+    full_width = _compat.full_width
 import plotly.express as px
 
 ROOT = Path(__file__).resolve().parents[2]
