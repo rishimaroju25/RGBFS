@@ -15,6 +15,9 @@ From the repo root, in this order:
 | 3 | run `notebooks/stress_labels.ipynb` | `stress_labels_daily.parquet`, `docs/stress_periods.csv` |
 | 4 | run `notebooks/04_returns_and_windows.ipynb` | `returns_*`, `features/connectedness_60d.parquet` |
 | 5 | run `notebooks/02_sec_filings.ipynb` | `data/processed/sec/` |
+| 6 | run `notebooks/13_anomaly_detection.ipynb` (after step 4) | `features/anomaly_network_daily.parquet`, `notebooks/outputs/rishi_week4/` |
+| 7 | run `notebooks/14_anomaly_flags_in_models.ipynb` | `notebooks/outputs/rishi_week5/` |
+| 8 | run `notebooks/15_alert_lead_time.ipynb` | `notebooks/outputs/rishi_week6/` (read by the dashboard alerts panel) |
 
 **Keep `data/raw/prices/`.** Yahoo drops a symbol's history after a company is acquired or delisted (8 tickers already lost theirs, see `survivorship_bias.md`), so a fresh download later can permanently lose stocks.
 
@@ -78,11 +81,23 @@ Built by `notebooks/08_cluster_stability.ipynb`, which also compares this settin
 
 Built by `notebooks/10_centrality_concentration.ipynb`.
 
+## Anomalies and alerts (`src/anomaly.py`, `src/alerts.py`, Weeks 4 to 6)
+
+| File | Contents |
+|---|---|
+| `features/anomaly_network_daily.parquet` | One row per trading day. `z_<metric>`: trailing one-year z-score of avg_corr, pc1_share, absorption and the 20-day changes in avg_corr and absorption (current window excluded from its own baseline). `z_composite`: mean z-score signed toward stress. `z_flag`: any metric z >= 2. `if_score`, `if_flag`: walk-forward Isolation Forest (refit yearly on past rows; threshold = 95th percentile of training scores). `if_flag_stress`: IF flag only when z_composite > 0. `alert`: z_flag or if_flag_stress. `asof`: date of the window the row comes from (carried forward at most 10 trading days). NaN during warm-up (about 1 year for z-scores, 3 years for IF) |
+| `notebooks/outputs/rishi_week5/model_alerts_daily.csv` | Walk-forward logistic regression, target = an episode starts within the next 20 trading days (days inside episodes excluded). `<model>|prob`, `<model>|alert` (above the 90th percentile of training probabilities) for baseline (VIX, 20-day VIX change, 20-day realized vol), + network z-scores, + Isolation Forest score |
+| `notebooks/outputs/rishi_week6/signals_daily.csv` | 0/1 alert per signal per day: network anomaly, network z-score only, VIX > 25, VIX z >= 2, STLFSI4 > 0 and > 1 (shifted 4 trading days for publication lag), and the two model alerts |
+| `notebooks/outputs/rishi_week6/signal_summary.csv` | Per signal and per start date (`start`, `start_trailing`): episodes warned early / late / missed, median lead (trading days), false alarm events per year, day-level precision, recall and false-alarm rate |
+| `notebooks/outputs/rishi_week6/lead_times_by_episode_*.csv` | Lead time in trading days for every episode and signal. Window: 60 trading days before the start (never before the previous episode's end) to 10 after |
+
+The stress labels are only used to score alerts, never as inputs.
+
 ## Market and stress series
 
 | File | Contents |
 |---|---|
-| `daily_panel.parquet` | FRED series on the trading-day calendar: `STLFSI4` and `NFCI` (weekly, forward-filled by observation date; **shift by the release lag before modeling**, use `src.walk_forward.lag_by_release`), `VIXCLS`, `BAMLH0A0HYM2` (only from late 2023 in our download), `T10Y2Y`; SPY and sector ETF prices and log returns; `avg_corr_60d` and `absorption_250d` (sector ETFs, trailing). **`stress` is an old placeholder (STLFSI4 > 1, not lagged), not the official label: do not use it; use `stress_labels_daily.parquet`** |
+| `daily_panel.parquet` | FRED series on the trading-day calendar: `STLFSI4` and `NFCI` (weekly, forward-filled by observation date; **shift by the release lag before modeling**: `src.walk_forward.lag_by_release` uses 5 trading days, `src/alerts.py` uses 4 for STLFSI4), `VIXCLS`, `BAMLH0A0HYM2` (only from late 2023 in our download), `T10Y2Y`; SPY and sector ETF prices and log returns; `avg_corr_60d` and `absorption_250d` (sector ETFs, trailing). **`stress` is an old placeholder (STLFSI4 > 1, not lagged), not the official label: do not use it; use `stress_labels_daily.parquet`** |
 | `stress_labels_daily.parquet` | `vol_centered`, `stress_day_raw`, `episode_id`, `stress` (1 inside an episode). **Uses future data by design: evaluation target only, never a feature** |
 | `docs/stress_periods.csv` | One row per episode: start (centered), start_trailing, end, peak volatility, drawdown, name |
 
