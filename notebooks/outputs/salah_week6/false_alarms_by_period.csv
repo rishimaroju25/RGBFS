@@ -1,0 +1,33 @@
+period,signal,false_alarms,false_alarms_per_year,day_false_positive_rate,episodes,episodes_caught
+"2010-12 euro crisis, US downgrade",VIX >= 30,1,0.39747634069400634,0.007736943907156673,1,0
+"2010-12 euro crisis, US downgrade",Forecast: Persistence,1,0.39747634069400634,0.019342359767891684,1,0
+"2010-12 euro crisis, US downgrade",Forecast: HAR-style,1,0.39747634069400634,0.0019342359767891683,1,0
+"2010-12 euro crisis, US downgrade",Forecast: Volatility + clusters,0,0.0,0.0,1,0
+"2010-12 euro crisis, US downgrade",Model: VIX only,4,1.5899053627760253,0.058027079303675046,1,0
+"2010-12 euro crisis, US downgrade",Model: Combined,0,0.0,0.0,1,0
+"2010-12 euro crisis, US downgrade",Network: avg_corr z >= 1.5,1,0.39747634069400634,0.07736943907156674,1,0
+"2010-12 euro crisis, US downgrade",Network: strength_top10 z >= 1.5,1,0.39747634069400634,0.13733075435203096,1,0
+"2013-19 bull market (2015, 2018 shocks)",VIX >= 30,0,0.0,0.0,3,0
+"2013-19 bull market (2015, 2018 shocks)",Forecast: Persistence,0,0.0,0.01699029126213592,3,0
+"2013-19 bull market (2015, 2018 shocks)",Forecast: HAR-style,0,0.0,0.0,3,0
+"2013-19 bull market (2015, 2018 shocks)",Forecast: Volatility + clusters,6,0.8581157775255391,0.037014563106796114,3,0
+"2013-19 bull market (2015, 2018 shocks)",Model: VIX only,10,1.4301929625425653,0.01699029126213592,3,0
+"2013-19 bull market (2015, 2018 shocks)",Model: Combined,5,0.7150964812712827,0.040655339805825245,3,0
+"2013-19 bull market (2015, 2018 shocks)",Network: avg_corr z >= 1.5,1,0.14301929625425652,0.0703883495145631,3,0
+"2013-19 bull market (2015, 2018 shocks)",Network: strength_top10 z >= 1.5,8,1.1441543700340522,0.13895631067961164,3,0
+2020-21 COVID,VIX >= 30,5,2.495049504950495,0.05089058524173028,1,0
+2020-21 COVID,Forecast: Persistence,0,0.0,0.022900763358778626,1,0
+2020-21 COVID,Forecast: HAR-style,2,0.998019801980198,0.01272264631043257,1,0
+2020-21 COVID,Forecast: Volatility + clusters,2,0.998019801980198,0.010178117048346057,1,0
+2020-21 COVID,Model: VIX only,7,3.493069306930693,0.29770992366412213,1,0
+2020-21 COVID,Model: Combined,2,0.998019801980198,0.02544529262086514,1,0
+2020-21 COVID,Network: avg_corr z >= 1.5,0,0.0,0.0,1,0
+2020-21 COVID,Network: strength_top10 z >= 1.5,0,0.0,0.0,1,0
+"2022-26 rate hikes, 2025 tariffs",VIX >= 30,2,0.4235294117647059,0.006141248720573183,4,1
+"2022-26 rate hikes, 2025 tariffs",Forecast: Persistence,0,0.0,0.03172978505629478,4,1
+"2022-26 rate hikes, 2025 tariffs",Forecast: HAR-style,0,0.0,0.006141248720573183,4,1
+"2022-26 rate hikes, 2025 tariffs",Forecast: Volatility + clusters,1,0.21176470588235294,0.006141248720573183,4,1
+"2022-26 rate hikes, 2025 tariffs",Model: VIX only,8,1.6941176470588235,0.062436028659160696,4,3
+"2022-26 rate hikes, 2025 tariffs",Model: Combined,9,1.9058823529411764,0.4216990788126919,4,2
+"2022-26 rate hikes, 2025 tariffs",Network: avg_corr z >= 1.5,0,0.0,0.09109518935516889,4,1
+"2022-26 rate hikes, 2025 tariffs",Network: strength_top10 z >= 1.5,5,1.0588235294117647,0.19242579324462641,4,1

@@ -1,0 +1,10 @@
+,VIX >= 30,Forecast: Persistence,Forecast: HAR-style,Forecast: Volatility + clusters,Model: VIX only,Model: Combined,Network: avg_corr z >= 1.5,Network: strength_top10 z >= 1.5
+"2011-07-25 U.S. debt ceiling, S&P downgrade and euro-area debt crisis",,,,,,,,
+2015-08-12 China devaluation selloff,,,,,,,,
+2018-02-01 Feb 2018 volatility spike,,,,,,,,
+2018-12-11 Q4 2018 selloff,,,,,,,,
+2020-02-14 COVID-19 crash,,,,,,,,
+2022-02-23 Russia's invasion of Ukraine,20.0,,,,,7.0,16.0,
+2022-04-20 2022 rate-hike bear market (first leg),,,,,6.0,6.0,,
+2022-09-19 2022 rate-hike bear market (second leg),,4.0,4.0,4.0,18.0,,,
+2025-03-20 Spring 2025 tariff selloff,,,,,10.0,,,16.0
