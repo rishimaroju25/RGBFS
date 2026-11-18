@@ -14,6 +14,8 @@ def load_data(root):
     for frame in (metrics, members):
         frame['date'] = pd.to_datetime(frame['date']).dt.normalize()
     mapping_path = base / 'sector_mapping.csv'
+    if not mapping_path.exists():  # shared copy in the repo (scripts/build_sector_mapping.py)
+        mapping_path = Path(root) / 'docs' / 'sector_mapping.csv'
     mapping = pd.read_csv(mapping_path) if mapping_path.exists() else None
     stress_path = base / 'stress_labels_daily.parquet'
     stress = pd.read_parquet(stress_path) if stress_path.exists() else None
