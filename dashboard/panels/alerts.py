@@ -160,4 +160,4 @@ def render_alerts_panel(root=ROOT):
     fresh["Stress labels (last episode end)"] = episodes["end"].max()
     st.dataframe(pd.DataFrame({"source": list(fresh), "latest date": [f"{d:%Y-%m-%d}" if d is not None else "" for d in fresh.values()]}),
                  hide_index=True)
-    st.caption("Prices: Yahoo Finance. VIX and STLFSI4: FRED. STLFSI4 is shifted 5 trading days for publication lag.")
+    st.caption("Prices: Yahoo Finance. VIX and STLFSI4: FRED. STLFSI4 is shifted 4 trading days for publication lag (released the Wednesday or Thursday after each week).")
