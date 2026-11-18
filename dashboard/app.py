@@ -3,24 +3,29 @@ import streamlit as st
 import pandas as pd
 from pathlib import Path
 
-# Make the repo importable when run as: python -m streamlit run dashboard/app.py
-ROOT = Path(__file__).resolve().parents[1]
-# Always put the repo first, so another installed package named "dashboard" cannot shadow this one
-if str(ROOT) in sys.path:
-    sys.path.remove(str(ROOT))
-sys.path.insert(0, str(ROOT))
-_loaded = sys.modules.get("dashboard")
-if _loaded is not None and not str(getattr(_loaded, "__file__", "") or "").startswith(str(ROOT)):
-    for _name in [m for m in sys.modules if m == "dashboard" or m.startswith("dashboard.")]:
-        del sys.modules[_name]
+# Load panels straight from their files, so no other package or old copy of the
+# project on this computer can be picked up instead (dashboard/panels/<name>.py).
+import importlib.util
+import traceback
 
-# If a panel cannot load, show why on its page instead of crashing the whole app
-try:
-    from dashboard.panels.alerts import render_alerts_panel
-    ALERTS_ERROR = None
-except Exception as exc:  # noqa: BLE001
-    render_alerts_panel = None
-    ALERTS_ERROR = f"{type(exc).__name__}: {exc}"
+ROOT = Path(__file__).resolve().parents[1]
+PANELS = Path(__file__).resolve().parent / "panels"
+
+
+def _load_panel(name, func):
+    """Return (function, None) or (None, error text) for dashboard/panels/<name>.py."""
+    path = PANELS / f"{name}.py"
+    try:
+        spec = importlib.util.spec_from_file_location(f"rgbfs_panel_{name}", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return getattr(module, func), None
+    except Exception:  # noqa: BLE001
+        return None, (f"Tried {path} (exists: {path.exists()}).\n\n"
+                      f"Python: {sys.executable}\n\n{traceback.format_exc(limit=3)}")
+
+
+render_alerts_panel, ALERTS_ERROR = _load_panel("alerts", "render_alerts_panel")
 
 # 1. Page Configuration
 st.set_page_config(
@@ -51,8 +56,9 @@ if page == "Overview":
 
 elif page == "Data & Alerts":
     if render_alerts_panel is None:
-        st.error(f"The Data & Alerts panel could not load ({ALERTS_ERROR}). "
-                 "Run `git pull`, then `python -m pip install -r requirements.txt`, and restart the dashboard.")
+        st.error("The Data & Alerts panel could not load. Send the text below to Rishi. "
+                 "Usually `python -m pip install -r requirements.txt` and a restart fixes it.")
+        st.code(ALERTS_ERROR)
     else:
         render_alerts_panel()
 
