@@ -69,11 +69,20 @@ Saved feature: `data/processed/features/connectedness_60d.parquet` (60-day windo
 
 Built by `notebooks/08_cluster_stability.ipynb`, which also compares this setting with Grace's original one.
 
+## Centrality concentration (`src/centrality.py`, Week 4)
+
+| File | Contents |
+|---|---|
+| `features/centrality_60d.parquet` | Every 5 trading days (same dates as `connectedness_60d`): strength_gini, strength_top10, degree_central, evc_top10, raw_evc_eff_share, n_stocks. Same graph as the cluster features (market-adjusted residual correlations, strongest 5% of positive links), computed over every stock in the window including unlinked ones. `raw_evc_eff_share` uses the raw correlation matrix and is almost the same as `avg_corr` (rank correlation 0.95), so do not use both as model features |
+| `features/centrality_hubs_60d.parquet` | date, rank, ticker, strength for the 10 most connected stocks in each window |
+
+Built by `notebooks/10_centrality_concentration.ipynb`.
+
 ## Market and stress series
 
 | File | Contents |
 |---|---|
-| `daily_panel.parquet` | FRED series on the trading-day calendar: `STLFSI4` and `NFCI` (weekly, forward-filled by observation date; **shift by the release lag before modeling**), `VIXCLS`, `BAMLH0A0HYM2` (only from late 2023 in our download), `T10Y2Y`; SPY and sector ETF prices and log returns |
+| `daily_panel.parquet` | FRED series on the trading-day calendar: `STLFSI4` and `NFCI` (weekly, forward-filled by observation date; **shift by the release lag before modeling**, use `src.walk_forward.lag_by_release`), `VIXCLS`, `BAMLH0A0HYM2` (only from late 2023 in our download), `T10Y2Y`; SPY and sector ETF prices and log returns; `avg_corr_60d` and `absorption_250d` (sector ETFs, trailing). **`stress` is an old placeholder (STLFSI4 > 1, not lagged), not the official label: do not use it; use `stress_labels_daily.parquet`** |
 | `stress_labels_daily.parquet` | `vol_centered`, `stress_day_raw`, `episode_id`, `stress` (1 inside an episode). **Uses future data by design: evaluation target only, never a feature** |
 | `docs/stress_periods.csv` | One row per episode: start (centered), start_trailing, end, peak volatility, drawdown, name |
 
