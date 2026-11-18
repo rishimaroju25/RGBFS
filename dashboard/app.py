@@ -1,6 +1,14 @@
+import sys
 import streamlit as st
 import pandas as pd
 from pathlib import Path
+
+# Make the repo importable when run as: python -m streamlit run dashboard/app.py
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from dashboard.panels.alerts import render_alerts_panel
 
 # 1. Page Configuration
 st.set_page_config(
@@ -14,7 +22,7 @@ st.sidebar.title("Market Stress Dashboard")
 st.sidebar.write("Developed by Team RGBFS")
 page = st.sidebar.radio(
     "Navigation", 
-    ["Overview", "Network & Clusters", "Sentiment Anomalies", "Volatility Forecasts"]
+    ["Overview", "Data & Alerts", "Network & Clusters", "Sentiment Anomalies", "Volatility Forecasts"]
 )
 
 # 3. Page Layouts & Panels
@@ -28,6 +36,9 @@ if page == "Overview":
     col1.metric(label="Current Market Volatility", value="18.5%", delta="+1.2%")
     col2.metric(label="Active Sentiment Anomalies", value="3 flags", delta="-1")
     col3.metric(label="Network Fragility", value="High", delta="Warning", delta_color="inverse")
+
+elif page == "Data & Alerts":
+    render_alerts_panel()
 
 elif page == "Network & Clusters":
     st.title("Network & Community Structure")

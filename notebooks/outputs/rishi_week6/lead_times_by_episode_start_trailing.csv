@@ -1,0 +1,14 @@
+episode,start,Network anomaly (combined),Network z-score only,VIX > 25,VIX z >= 2,STLFSI4 > 0 (lagged),STLFSI4 > 1 (lagged),Model alert (+ z + IF),Baseline model alert (VIX + vol)
+Aug 2007 credit and quant-fund stress,2007-08-17,36,36,10,37,6,-4,,
+Bear Stearns,2008-03-18,missed,missed,48,39,60*,60*,,
+Global financial crisis (Lehman),2008-09-15,-3,-3,51,0,60*,60*,,
+Flash crash and first euro-area debt stress,2010-05-10,-3,-3,2,2,55,missed,,
+"U.S. debt ceiling, S&P downgrade and euro-area debt crisis",2011-08-08,2,2,6,2,12,-8,60*,missed
+China devaluation selloff,2015-08-26,1,1,3,3,33,missed,missed,missed
+Feb 2018 volatility spike,2018-02-14,8,8,7,12,-1,missed,33,-8
+Q4 2018 selloff,2018-12-26,-10,-10,42,52,17,missed,31,32
+COVID-19 crash,2020-03-02,1,1,5,5,-3,-8,16,missed
+Russia's invasion of Ukraine,2022-03-09,60*,60*,33,32,4,missed,53,53
+2022 rate-hike bear market (first leg),2022-05-04,35,35,38*,38*,38*,missed,missed,38
+2022 rate-hike bear market (second leg),2022-10-03,60*,60*,59,missed,60*,missed,missed,60*
+Spring 2025 tariff selloff,2025-04-03,60*,60*,18,23,-5,missed,60*,14
