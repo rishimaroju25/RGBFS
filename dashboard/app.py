@@ -5,10 +5,22 @@ from pathlib import Path
 
 # Make the repo importable when run as: python -m streamlit run dashboard/app.py
 ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+# Always put the repo first, so another installed package named "dashboard" cannot shadow this one
+if str(ROOT) in sys.path:
+    sys.path.remove(str(ROOT))
+sys.path.insert(0, str(ROOT))
+_loaded = sys.modules.get("dashboard")
+if _loaded is not None and not str(getattr(_loaded, "__file__", "") or "").startswith(str(ROOT)):
+    for _name in [m for m in sys.modules if m == "dashboard" or m.startswith("dashboard.")]:
+        del sys.modules[_name]
 
-from dashboard.panels.alerts import render_alerts_panel
+# If a panel cannot load, show why on its page instead of crashing the whole app
+try:
+    from dashboard.panels.alerts import render_alerts_panel
+    ALERTS_ERROR = None
+except Exception as exc:  # noqa: BLE001
+    render_alerts_panel = None
+    ALERTS_ERROR = f"{type(exc).__name__}: {exc}"
 
 # 1. Page Configuration
 st.set_page_config(
@@ -38,7 +50,11 @@ if page == "Overview":
     col3.metric(label="Network Fragility", value="High", delta="Warning", delta_color="inverse")
 
 elif page == "Data & Alerts":
-    render_alerts_panel()
+    if render_alerts_panel is None:
+        st.error(f"The Data & Alerts panel could not load ({ALERTS_ERROR}). "
+                 "Run `git pull`, then `python -m pip install -r requirements.txt`, and restart the dashboard.")
+    else:
+        render_alerts_panel()
 
 elif page == "Network & Clusters":
     st.title("Network & Community Structure")
