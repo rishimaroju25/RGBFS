@@ -1,0 +1,307 @@
+start,end,n_flag_days,kind,signal
+2005-11-07,2005-11-18,10,false alarm,Network anomaly (combined)
+2006-01-05,2006-01-19,10,false alarm,Network anomaly (combined)
+2006-02-17,2006-03-10,15,false alarm,Network anomaly (combined)
+2006-06-07,2006-08-23,55,false alarm,Network anomaly (combined)
+2007-02-16,2007-02-23,5,false alarm,Network anomaly (combined)
+2007-03-05,2007-03-30,20,false alarm,Network anomaly (combined)
+2007-06-27,2007-08-22,40,warning,Network anomaly (combined)
+2008-09-18,2009-01-05,75,during stress,Network anomaly (combined)
+2009-08-25,2009-08-31,5,false alarm,Network anomaly (combined)
+2009-11-18,2009-11-24,5,false alarm,Network anomaly (combined)
+2010-05-13,2010-08-06,60,during stress,Network anomaly (combined)
+2011-03-14,2011-03-25,10,false alarm,Network anomaly (combined)
+2011-08-04,2011-10-20,55,during stress,Network anomaly (combined)
+2012-08-22,2012-08-28,5,false alarm,Network anomaly (combined)
+2014-02-06,2014-02-12,5,false alarm,Network anomaly (combined)
+2014-08-13,2014-08-19,5,false alarm,Network anomaly (combined)
+2014-10-09,2014-11-05,20,false alarm,Network anomaly (combined)
+2015-01-13,2015-01-20,5,false alarm,Network anomaly (combined)
+2015-08-25,2015-10-27,45,during stress,Network anomaly (combined)
+2015-12-24,2015-12-31,5,false alarm,Network anomaly (combined)
+2016-02-02,2016-02-08,5,false alarm,Network anomaly (combined)
+2016-11-01,2016-11-07,5,false alarm,Network anomaly (combined)
+2017-07-07,2017-07-13,5,false alarm,Network anomaly (combined)
+2018-02-02,2018-05-07,65,during stress,Network anomaly (combined)
+2019-01-10,2019-01-16,5,false alarm,Network anomaly (combined)
+2019-10-04,2019-10-17,10,false alarm,Network anomaly (combined)
+2020-02-28,2020-05-15,55,during stress,Network anomaly (combined)
+2021-06-14,2021-06-18,5,false alarm,Network anomaly (combined)
+2021-09-15,2021-09-21,5,false alarm,Network anomaly (combined)
+2021-12-09,2021-12-30,15,warning,Network anomaly (combined)
+2022-02-07,2022-02-28,15,warning,Network anomaly (combined)
+2022-03-15,2022-03-21,5,warning,Network anomaly (combined)
+2022-04-05,2022-04-19,10,warning,Network anomaly (combined)
+2022-04-27,2022-07-29,65,during stress,Network anomaly (combined)
+2022-08-08,2022-08-12,5,warning,Network anomaly (combined)
+2022-08-22,2022-08-26,5,warning,Network anomaly (combined)
+2022-10-18,2022-10-31,10,during stress,Network anomaly (combined)
+2023-10-31,2023-11-20,15,false alarm,Network anomaly (combined)
+2024-02-27,2024-03-04,5,false alarm,Network anomaly (combined)
+2025-01-03,2025-01-17,10,warning,Network anomaly (combined)
+2025-04-09,2025-07-07,60,during stress,Network anomaly (combined)
+2005-11-07,2005-11-18,10,false alarm,Network z-score only
+2006-01-05,2006-01-19,10,false alarm,Network z-score only
+2006-02-17,2006-03-10,15,false alarm,Network z-score only
+2006-06-07,2006-08-23,55,false alarm,Network z-score only
+2007-02-16,2007-02-23,5,false alarm,Network z-score only
+2007-03-05,2007-03-30,20,false alarm,Network z-score only
+2007-06-27,2007-08-22,40,warning,Network z-score only
+2008-09-18,2009-01-05,75,during stress,Network z-score only
+2009-08-25,2009-08-31,5,false alarm,Network z-score only
+2009-11-18,2009-11-24,5,false alarm,Network z-score only
+2010-05-13,2010-08-06,60,during stress,Network z-score only
+2011-03-14,2011-03-25,10,false alarm,Network z-score only
+2011-08-04,2011-10-20,55,during stress,Network z-score only
+2012-08-22,2012-08-28,5,false alarm,Network z-score only
+2014-02-06,2014-02-12,5,false alarm,Network z-score only
+2014-08-13,2014-08-19,5,false alarm,Network z-score only
+2014-10-09,2014-11-05,20,false alarm,Network z-score only
+2015-01-13,2015-01-20,5,false alarm,Network z-score only
+2015-08-25,2015-10-27,45,during stress,Network z-score only
+2015-12-24,2015-12-31,5,false alarm,Network z-score only
+2016-02-02,2016-02-08,5,false alarm,Network z-score only
+2016-11-01,2016-11-07,5,false alarm,Network z-score only
+2017-07-07,2017-07-13,5,false alarm,Network z-score only
+2018-02-02,2018-05-07,65,during stress,Network z-score only
+2019-01-10,2019-01-16,5,false alarm,Network z-score only
+2019-10-04,2019-10-17,10,false alarm,Network z-score only
+2020-02-28,2020-05-15,55,during stress,Network z-score only
+2021-06-14,2021-06-18,5,false alarm,Network z-score only
+2021-09-15,2021-09-21,5,false alarm,Network z-score only
+2021-12-09,2021-12-30,15,warning,Network z-score only
+2022-02-07,2022-02-28,15,warning,Network z-score only
+2022-03-15,2022-03-21,5,warning,Network z-score only
+2022-04-05,2022-04-19,10,warning,Network z-score only
+2022-04-27,2022-07-29,65,during stress,Network z-score only
+2022-08-08,2022-08-12,5,warning,Network z-score only
+2022-08-22,2022-08-26,5,warning,Network z-score only
+2022-10-18,2022-10-31,10,during stress,Network z-score only
+2023-10-31,2023-11-20,15,false alarm,Network z-score only
+2024-02-27,2024-03-04,5,false alarm,Network z-score only
+2025-01-03,2025-01-17,10,warning,Network z-score only
+2025-04-09,2025-07-07,60,during stress,Network z-score only
+2007-08-03,2007-09-17,16,during stress,VIX > 25
+2007-11-07,2007-11-27,12,false alarm,VIX > 25
+2008-01-08,2008-01-08,1,warning,VIX > 25
+2008-01-17,2008-02-21,21,warning,VIX > 25
+2008-02-29,2008-03-31,20,warning,VIX > 25
+2008-07-02,2008-07-17,9,warning,VIX > 25
+2008-09-09,2009-07-16,213,during stress,VIX > 25
+2009-07-28,2009-09-08,20,false alarm,VIX > 25
+2009-09-25,2009-10-06,7,false alarm,VIX > 25
+2009-10-28,2009-11-05,6,false alarm,VIX > 25
+2010-01-22,2010-01-25,2,false alarm,VIX > 25
+2010-02-04,2010-02-10,5,warning,VIX > 25
+2010-05-06,2010-07-21,46,during stress,VIX > 25
+2010-08-11,2010-08-31,12,false alarm,VIX > 25
+2011-03-16,2011-03-17,2,false alarm,VIX > 25
+2011-07-29,2011-12-15,94,during stress,VIX > 25
+2012-05-18,2012-05-18,1,false alarm,VIX > 25
+2012-06-01,2012-06-04,2,false alarm,VIX > 25
+2014-10-15,2014-10-16,2,false alarm,VIX > 25
+2015-08-21,2015-09-09,12,during stress,VIX > 25
+2015-09-28,2015-09-29,2,false alarm,VIX > 25
+2016-01-08,2016-01-21,6,false alarm,VIX > 25
+2016-02-08,2016-02-12,5,false alarm,VIX > 25
+2016-06-24,2016-06-24,1,false alarm,VIX > 25
+2018-02-05,2018-02-12,6,during stress,VIX > 25
+2018-10-24,2018-10-24,1,warning,VIX > 25
+2018-12-18,2019-01-03,10,during stress,VIX > 25
+2020-02-24,2020-07-28,104,during stress,VIX > 25
+2020-08-31,2020-11-12,49,false alarm,VIX > 25
+2020-12-21,2020-12-21,1,false alarm,VIX > 25
+2021-01-04,2021-01-06,3,false alarm,VIX > 25
+2021-01-27,2021-02-02,5,false alarm,VIX > 25
+2021-02-25,2021-03-08,5,false alarm,VIX > 25
+2021-05-12,2021-05-12,1,false alarm,VIX > 25
+2021-09-20,2021-09-20,1,false alarm,VIX > 25
+2021-11-26,2021-12-06,6,warning,VIX > 25
+2022-01-20,2022-01-28,7,warning,VIX > 25
+2022-02-11,2022-03-17,23,warning,VIX > 25
+2022-04-22,2022-07-18,53,during stress,VIX > 25
+2022-08-26,2022-11-09,47,warning,VIX > 25
+2023-03-13,2023-03-17,3,false alarm,VIX > 25
+2024-08-05,2024-08-07,3,false alarm,VIX > 25
+2024-12-18,2024-12-18,1,false alarm,VIX > 25
+2025-03-10,2025-03-11,2,warning,VIX > 25
+2025-04-03,2025-04-28,16,during stress,VIX > 25
+2025-10-16,2025-10-16,1,false alarm,VIX > 25
+2025-11-20,2025-11-20,1,false alarm,VIX > 25
+2026-03-06,2026-04-07,14,false alarm,VIX > 25
+2005-10-12,2005-10-27,5,false alarm,VIX z >= 2
+2006-05-17,2006-06-19,19,false alarm,VIX z >= 2
+2006-07-13,2006-07-18,4,false alarm,VIX z >= 2
+2007-02-27,2007-03-05,3,false alarm,VIX z >= 2
+2007-03-13,2007-03-13,1,false alarm,VIX z >= 2
+2007-06-26,2007-06-26,1,warning,VIX z >= 2
+2007-07-10,2007-07-10,1,warning,VIX z >= 2
+2007-07-20,2007-09-17,39,warning,VIX z >= 2
+2007-11-07,2007-11-15,5,false alarm,VIX z >= 2
+2007-11-26,2007-11-26,1,false alarm,VIX z >= 2
+2008-01-22,2008-01-22,1,warning,VIX z >= 2
+2008-03-14,2008-03-17,2,during stress,VIX z >= 2
+2008-09-15,2008-12-04,54,during stress,VIX z >= 2
+2010-05-06,2010-05-07,2,during stress,VIX z >= 2
+2010-05-18,2010-06-07,10,during stress,VIX z >= 2
+2010-06-29,2010-06-30,2,false alarm,VIX z >= 2
+2011-08-04,2011-10-05,40,during stress,VIX z >= 2
+2013-06-20,2013-06-24,2,false alarm,VIX z >= 2
+2013-10-07,2013-10-09,3,false alarm,VIX z >= 2
+2014-01-24,2014-02-05,5,false alarm,VIX z >= 2
+2014-10-09,2014-10-17,7,false alarm,VIX z >= 2
+2014-12-11,2014-12-17,5,false alarm,VIX z >= 2
+2015-01-05,2015-01-16,6,false alarm,VIX z >= 2
+2015-01-28,2015-01-30,2,false alarm,VIX z >= 2
+2015-08-21,2015-09-10,14,during stress,VIX z >= 2
+2015-09-28,2015-09-29,2,false alarm,VIX z >= 2
+2016-01-08,2016-01-21,5,false alarm,VIX z >= 2
+2016-02-11,2016-02-11,1,false alarm,VIX z >= 2
+2018-01-29,2018-03-02,18,warning,VIX z >= 2
+2018-03-22,2018-04-09,7,false alarm,VIX z >= 2
+2018-10-10,2018-10-11,2,warning,VIX z >= 2
+2018-10-24,2018-10-29,4,warning,VIX z >= 2
+2018-12-18,2018-12-28,8,during stress,VIX z >= 2
+2020-02-24,2020-04-03,30,during stress,VIX z >= 2
+2021-11-26,2021-12-06,6,warning,VIX z >= 2
+2022-01-21,2022-01-28,6,warning,VIX z >= 2
+2022-02-11,2022-03-15,20,warning,VIX z >= 2
+2022-04-26,2022-05-12,9,during stress,VIX z >= 2
+2022-06-13,2022-06-16,3,during stress,VIX z >= 2
+2024-08-02,2024-08-08,5,false alarm,VIX z >= 2
+2024-09-04,2024-09-06,2,false alarm,VIX z >= 2
+2024-10-07,2024-10-07,1,false alarm,VIX z >= 2
+2024-10-31,2024-11-04,3,false alarm,VIX z >= 2
+2024-12-18,2024-12-19,2,false alarm,VIX z >= 2
+2025-03-03,2025-03-13,8,warning,VIX z >= 2
+2025-04-03,2025-04-22,13,during stress,VIX z >= 2
+2026-03-27,2026-03-30,2,false alarm,VIX z >= 2
+2007-08-09,2009-12-23,600,during stress,STLFSI4 > 0 (lagged)
+2010-02-04,2010-02-10,5,warning,STLFSI4 > 0 (lagged)
+2010-02-19,2010-02-24,4,warning,STLFSI4 > 0 (lagged)
+2010-05-13,2010-10-20,112,during stress,STLFSI4 > 0 (lagged)
+2010-11-26,2010-12-08,9,false alarm,STLFSI4 > 0 (lagged)
+2011-03-24,2011-03-30,5,false alarm,STLFSI4 > 0 (lagged)
+2011-07-21,2011-07-27,5,warning,STLFSI4 > 0 (lagged)
+2011-08-11,2012-03-21,154,during stress,STLFSI4 > 0 (lagged)
+2012-04-05,2012-05-09,24,false alarm,STLFSI4 > 0 (lagged)
+2012-05-17,2012-07-25,48,false alarm,STLFSI4 > 0 (lagged)
+2012-08-02,2012-08-08,5,false alarm,STLFSI4 > 0 (lagged)
+2013-07-05,2013-07-10,4,false alarm,STLFSI4 > 0 (lagged)
+2014-10-23,2014-10-29,5,false alarm,STLFSI4 > 0 (lagged)
+2014-12-18,2014-12-31,9,false alarm,STLFSI4 > 0 (lagged)
+2015-01-15,2015-01-28,9,false alarm,STLFSI4 > 0 (lagged)
+2015-02-05,2015-02-11,5,false alarm,STLFSI4 > 0 (lagged)
+2015-07-10,2015-07-22,9,warning,STLFSI4 > 0 (lagged)
+2015-08-27,2015-11-11,54,during stress,STLFSI4 > 0 (lagged)
+2015-11-19,2016-04-27,109,false alarm,STLFSI4 > 0 (lagged)
+2016-05-05,2016-07-20,53,false alarm,STLFSI4 > 0 (lagged)
+2016-07-28,2016-11-16,79,false alarm,STLFSI4 > 0 (lagged)
+2016-12-08,2016-12-14,5,false alarm,STLFSI4 > 0 (lagged)
+2018-02-15,2018-02-22,5,during stress,STLFSI4 > 0 (lagged)
+2018-03-29,2018-04-25,19,false alarm,STLFSI4 > 0 (lagged)
+2018-05-10,2018-05-16,5,false alarm,STLFSI4 > 0 (lagged)
+2018-06-07,2018-06-13,5,false alarm,STLFSI4 > 0 (lagged)
+2018-11-29,2019-01-16,28,warning,STLFSI4 > 0 (lagged)
+2019-08-15,2019-08-28,10,false alarm,STLFSI4 > 0 (lagged)
+2019-10-03,2019-10-23,15,false alarm,STLFSI4 > 0 (lagged)
+2020-03-05,2020-06-10,68,during stress,STLFSI4 > 0 (lagged)
+2020-06-18,2020-07-29,29,during stress,STLFSI4 > 0 (lagged)
+2020-09-17,2020-09-23,5,false alarm,STLFSI4 > 0 (lagged)
+2020-10-01,2020-10-07,5,false alarm,STLFSI4 > 0 (lagged)
+2020-10-29,2020-11-11,10,false alarm,STLFSI4 > 0 (lagged)
+2022-03-03,2022-03-23,15,during stress,STLFSI4 > 0 (lagged)
+2022-05-05,2022-06-08,24,during stress,STLFSI4 > 0 (lagged)
+2022-06-24,2022-07-27,23,during stress,STLFSI4 > 0 (lagged)
+2022-09-29,2022-10-26,20,during stress,STLFSI4 > 0 (lagged)
+2022-12-15,2023-01-05,14,false alarm,STLFSI4 > 0 (lagged)
+2023-03-23,2023-04-05,10,false alarm,STLFSI4 > 0 (lagged)
+2025-04-10,2025-04-24,10,during stress,STLFSI4 > 0 (lagged)
+2007-08-23,2007-09-26,24,false alarm,STLFSI4 > 1 (lagged)
+2007-11-15,2008-02-06,52,false alarm,STLFSI4 > 1 (lagged)
+2008-02-14,2008-05-29,73,warning,STLFSI4 > 1 (lagged)
+2008-06-12,2009-07-29,285,warning,STLFSI4 > 1 (lagged)
+2010-05-27,2010-06-09,9,during stress,STLFSI4 > 1 (lagged)
+2011-08-18,2011-08-24,5,during stress,STLFSI4 > 1 (lagged)
+2011-09-29,2011-10-19,15,during stress,STLFSI4 > 1 (lagged)
+2011-11-25,2011-12-07,9,during stress,STLFSI4 > 1 (lagged)
+2016-01-28,2016-02-03,5,false alarm,STLFSI4 > 1 (lagged)
+2016-02-19,2016-02-24,4,false alarm,STLFSI4 > 1 (lagged)
+2020-03-12,2020-05-13,44,during stress,STLFSI4 > 1 (lagged)
+2023-03-23,2023-03-29,5,false alarm,STLFSI4 > 1 (lagged)
+2011-01-03,2011-03-14,45,false alarm,Model alert (+ z + IF)
+2011-03-31,2011-07-08,65,false alarm,Model alert (+ z + IF)
+2012-04-23,2012-05-10,10,false alarm,Model alert (+ z + IF)
+2012-08-10,2012-09-19,20,false alarm,Model alert (+ z + IF)
+2012-10-11,2012-10-22,5,false alarm,Model alert (+ z + IF)
+2012-11-19,2013-04-01,76,false alarm,Model alert (+ z + IF)
+2013-04-16,2013-09-16,105,false alarm,Model alert (+ z + IF)
+2013-10-11,2013-11-21,30,false alarm,Model alert (+ z + IF)
+2013-12-02,2013-12-31,21,false alarm,Model alert (+ z + IF)
+2014-02-06,2014-02-12,5,false alarm,Model alert (+ z + IF)
+2014-02-24,2014-02-27,4,false alarm,Model alert (+ z + IF)
+2014-06-03,2014-06-09,5,false alarm,Model alert (+ z + IF)
+2014-06-17,2014-06-23,5,false alarm,Model alert (+ z + IF)
+2014-08-06,2014-10-16,50,false alarm,Model alert (+ z + IF)
+2016-07-12,2016-07-29,9,false alarm,Model alert (+ z + IF)
+2016-09-06,2016-09-08,3,false alarm,Model alert (+ z + IF)
+2016-10-25,2016-10-31,5,false alarm,Model alert (+ z + IF)
+2016-11-08,2016-11-14,5,false alarm,Model alert (+ z + IF)
+2017-01-31,2017-01-31,1,false alarm,Model alert (+ z + IF)
+2017-03-07,2017-03-13,5,false alarm,Model alert (+ z + IF)
+2017-03-21,2017-06-14,58,false alarm,Model alert (+ z + IF)
+2017-07-14,2017-08-03,11,false alarm,Model alert (+ z + IF)
+2017-08-18,2017-09-22,25,false alarm,Model alert (+ z + IF)
+2017-10-23,2017-11-03,7,false alarm,Model alert (+ z + IF)
+2017-12-27,2017-12-29,3,warning,Model alert (+ z + IF)
+2018-01-19,2018-01-31,9,warning,Model alert (+ z + IF)
+2018-03-06,2018-03-09,2,false alarm,Model alert (+ z + IF)
+2018-09-10,2018-09-14,5,false alarm,Model alert (+ z + IF)
+2018-11-08,2018-11-08,1,warning,Model alert (+ z + IF)
+2019-01-24,2019-01-24,1,false alarm,Model alert (+ z + IF)
+2019-05-22,2019-05-23,2,false alarm,Model alert (+ z + IF)
+2019-06-04,2019-06-11,6,false alarm,Model alert (+ z + IF)
+2019-08-29,2019-09-05,5,false alarm,Model alert (+ z + IF)
+2020-02-06,2020-02-13,6,warning,Model alert (+ z + IF)
+2020-08-10,2020-08-10,1,false alarm,Model alert (+ z + IF)
+2020-10-01,2020-12-03,45,false alarm,Model alert (+ z + IF)
+2020-12-11,2020-12-17,5,false alarm,Model alert (+ z + IF)
+2021-02-03,2021-02-04,2,false alarm,Model alert (+ z + IF)
+2021-02-25,2021-03-10,8,false alarm,Model alert (+ z + IF)
+2021-03-18,2021-04-15,20,false alarm,Model alert (+ z + IF)
+2021-04-30,2021-06-11,23,false alarm,Model alert (+ z + IF)
+2021-07-09,2021-07-26,11,false alarm,Model alert (+ z + IF)
+2021-08-05,2021-08-09,3,false alarm,Model alert (+ z + IF)
+2021-10-13,2021-10-26,9,false alarm,Model alert (+ z + IF)
+2021-12-21,2021-12-30,7,warning,Model alert (+ z + IF)
+2023-10-17,2023-12-05,31,false alarm,Model alert (+ z + IF)
+2024-04-15,2024-04-30,11,false alarm,Model alert (+ z + IF)
+2024-08-05,2024-08-30,20,false alarm,Model alert (+ z + IF)
+2024-12-18,2025-01-17,16,false alarm,Model alert (+ z + IF)
+2025-04-25,2025-05-14,11,false alarm,Model alert (+ z + IF)
+2026-03-27,2026-03-30,2,false alarm,Model alert (+ z + IF)
+2011-12-09,2011-12-20,8,false alarm,Baseline model alert (VIX + vol)
+2015-09-11,2015-09-30,13,false alarm,Baseline model alert (VIX + vol)
+2016-01-29,2016-02-26,20,false alarm,Baseline model alert (VIX + vol)
+2016-07-12,2016-07-21,8,false alarm,Baseline model alert (VIX + vol)
+2018-02-27,2018-03-09,9,false alarm,Baseline model alert (VIX + vol)
+2018-04-17,2018-04-23,5,false alarm,Baseline model alert (VIX + vol)
+2018-11-07,2018-11-12,4,warning,Baseline model alert (VIX + vol)
+2018-11-20,2018-11-21,2,warning,Baseline model alert (VIX + vol)
+2018-12-04,2018-12-06,2,warning,Baseline model alert (VIX + vol)
+2019-01-10,2019-01-30,14,false alarm,Baseline model alert (VIX + vol)
+2019-08-19,2019-09-10,15,false alarm,Baseline model alert (VIX + vol)
+2020-06-26,2020-07-20,13,false alarm,Baseline model alert (VIX + vol)
+2020-09-11,2020-10-07,19,false alarm,Baseline model alert (VIX + vol)
+2020-11-03,2020-11-24,16,false alarm,Baseline model alert (VIX + vol)
+2021-12-21,2021-12-23,3,warning,Baseline model alert (VIX + vol)
+2022-02-02,2022-02-16,9,warning,Baseline model alert (VIX + vol)
+2022-03-10,2022-04-01,15,warning,Baseline model alert (VIX + vol)
+2022-06-29,2022-07-15,10,warning,Baseline model alert (VIX + vol)
+2022-09-07,2022-09-16,6,warning,Baseline model alert (VIX + vol)
+2022-11-28,2022-12-08,9,false alarm,Baseline model alert (VIX + vol)
+2022-12-20,2022-12-28,5,false alarm,Baseline model alert (VIX + vol)
+2024-08-05,2024-08-26,15,false alarm,Baseline model alert (VIX + vol)
+2025-03-14,2025-03-19,4,warning,Baseline model alert (VIX + vol)
+2025-04-25,2025-05-08,10,false alarm,Baseline model alert (VIX + vol)
+2026-03-27,2026-03-27,1,false alarm,Baseline model alert (VIX + vol)

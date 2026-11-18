@@ -1,6 +1,15 @@
 from pathlib import Path
 import pandas as pd
 import streamlit as st
+
+try:
+    from dashboard.compat import full_width
+except ImportError:  # loaded by file path, or another "dashboard" package is installed
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("rgbfs_compat", Path(__file__).resolve().parents[1] / "compat.py")
+    _compat = _ilu.module_from_spec(_spec)
+    _spec.loader.exec_module(_compat)
+    full_width = _compat.full_width
 import plotly.express as px
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -14,6 +23,8 @@ def load_data(root):
     for frame in (metrics, members):
         frame['date'] = pd.to_datetime(frame['date']).dt.normalize()
     mapping_path = base / 'sector_mapping.csv'
+    if not mapping_path.exists():  # shared copy in the repo (scripts/build_sector_mapping.py)
+        mapping_path = Path(root) / 'docs' / 'sector_mapping.csv'
     mapping = pd.read_csv(mapping_path) if mapping_path.exists() else None
     stress_path = base / 'stress_labels_daily.parquet'
     stress = pd.read_parquet(stress_path) if stress_path.exists() else None
@@ -61,7 +72,7 @@ def render_clusters_panel(root=ROOT):
             flagged = history[history.stress.eq(1)]
             fig.add_scatter(x=flagged.date, y=flagged[metric], mode='markers', name='Stress snapshot', marker=dict(color='red', size=9))
         st.caption('Stress labels are retrospective; missing labels are unknown, not normal.')
-    st.plotly_chart(fig, width="stretch")
+    full_width(st.plotly_chart, fig)
     st.caption('Community IDs are snapshot-specific. Stability compares partitions across dates; ARI measures agreement with sector labels.')
     snapshot = members.loc[members.date.eq(selected)].copy()
     if snapshot.empty:
@@ -77,7 +88,7 @@ def render_clusters_panel(root=ROOT):
     bar.update_xaxes(type='category', categoryorder='array',
                      categoryarray=community_order, tickmode='array',
                      tickvals=community_order, ticktext=community_order)
-    st.plotly_chart(bar, width="stretch")
+    full_width(st.plotly_chart, bar)
     if mapping is not None and {'ticker','sector'}.issubset(mapping.columns):
         snapshot = snapshot.merge(mapping[['ticker','sector'] + (['name'] if 'name' in mapping else [])].drop_duplicates('ticker'), on='ticker', how='left')
         coverage = snapshot.sector.notna().mean()
@@ -100,7 +111,7 @@ def render_clusters_panel(root=ROOT):
         if mode != 'Stock count':
             heatmap.update_traces(texttemplate='%{z:.1f}%')
             heatmap.update_coloraxes(colorbar_ticksuffix='%')
-        st.plotly_chart(heatmap, width="stretch")
+        full_width(st.plotly_chart, heatmap)
     else:
         st.info('Optional sector mapping unavailable; sector composition omitted.')
     st.subheader('Stock and community explorer')
@@ -111,10 +122,10 @@ def render_clusters_panel(root=ROOT):
         visible = visible[visible.ticker.astype(str).str.upper().str.contains(query, regex=False)]
     visible = visible.copy()
     visible['date'] = visible['date'].dt.strftime('%Y-%m-%d')
-    st.dataframe(visible, width="stretch", hide_index=True)
+    full_width(st.dataframe, visible, hide_index=True)
     st.download_button('Download filtered membership CSV', visible.to_csv(index=False), 'cluster_memberships.csv', 'text/csv', key='cluster_download_members')
     with st.expander('Historical metrics table'):
         history_display = history.copy()
         history_display['date'] = history_display['date'].dt.strftime('%Y-%m-%d')
-        st.dataframe(history_display, width="stretch", hide_index=True)
+        full_width(st.dataframe, history_display, hide_index=True)
         st.download_button('Download historical metrics CSV', history.to_csv(index=False), 'cluster_metrics.csv', 'text/csv', key='cluster_download_metrics')
