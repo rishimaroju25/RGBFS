@@ -21,6 +21,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from dashboard.compat import full_width
+
 ROOT = Path(os.environ.get("RGBFS_DATA_ROOT", Path(__file__).resolve().parents[2]))
 NETWORK = "Network anomaly (combined)"
 
@@ -124,7 +126,7 @@ def render_alerts_panel(root=ROOT):
                       yaxis=dict(title=line or ""),
                       yaxis2=dict(overlaying="y", side="right", type="category", showgrid=False),
                       legend=dict(orientation="h", y=-0.15))
-    st.plotly_chart(fig, width="stretch")
+    full_width(st.plotly_chart, fig)
 
     # ---- lead times
     st.subheader("Lead time by episode")
@@ -132,13 +134,13 @@ def render_alerts_panel(root=ROOT):
                      help="start uses a centered volatility window (early bound); start_trailing a trailing window (late bound).")
     st.caption("Trading days of warning before the episode start. Negative = late, 'missed' = no alert "
                "within 60 days before to 10 days after, blank = no data yet, * = the signal was already on when the window opened.")
-    st.dataframe(leads[which], width="stretch", hide_index=True)
+    full_width(st.dataframe, leads[which], hide_index=True)
 
     st.subheader("Signal comparison")
     show = summary[summary.start_col.eq(which)].drop(columns=["start_col"])
     keep = ["signal", "episodes_scored", "warned_early", "late", "missed", "median_lead_days",
             "false_alarms_per_year", "day_precision", "day_recall", "day_false_alarm_rate"]
-    st.dataframe(show[[c for c in keep if c in show]].round(3), width="stretch", hide_index=True)
+    full_width(st.dataframe, show[[c for c in keep if c in show]].round(3), hide_index=True)
     st.caption("A signal that fires often can 'warn' many episodes by chance: read lead times together with false alarms per year.")
     st.download_button("Download signal comparison CSV", show.to_csv(index=False), "signal_comparison.csv",
                        "text/csv", key="alerts_download_summary")
@@ -149,7 +151,7 @@ def render_alerts_panel(root=ROOT):
         n = market["n_returns"]
         figc = go.Figure(go.Scatter(x=n.index, y=n, mode="lines", line=dict(width=1), name="stocks"))
         figc.update_layout(height=280, margin=dict(t=20), yaxis_title="Stocks with a usable return")
-        st.plotly_chart(figc, width="stretch")
+        full_width(st.plotly_chart, figc)
     fresh = {"Alert signals": signals.index.max()}
     if anom is not None:
         fresh["Network windows"] = pd.Timestamp(anom["asof"].dropna().max()) if anom["asof"].notna().any() else None
