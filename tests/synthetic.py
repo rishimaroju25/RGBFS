@@ -60,7 +60,7 @@ def make(seed: int = 0):
     spy_ret = rng.normal(0, 1, n) * vol / np.sqrt(252)
     vix = 100 * vol + rng.normal(0, 1.5, n)
     stlfsi = pd.Series(-0.5 + 2.5 * np.r_[np.zeros(10), sig[:-10]] + rng.normal(0, 0.2, n), index=cal)
-    stlfsi = stlfsi.where(cal.dayofweek == 4).ffill()
+    stlfsi = stlfsi.where(cal.day_of_week == 4).ffill()
     panel = pd.DataFrame({"VIXCLS": vix, "STLFSI4": stlfsi.to_numpy(), "SPY_ret": spy_ret,
                           "SPY": 100 * np.exp(np.cumsum(spy_ret))}, index=cal)
     stress = pd.DataFrame({"stress": (sig == 1).astype(float)}, index=cal)
