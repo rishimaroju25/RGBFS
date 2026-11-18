@@ -1,0 +1,19 @@
+feature,date,max_abs_diff,result
+features/connectedness_60d,2007-07-19,5.551115123125783e-17,PASS
+"daily_panel avg_corr_60d, absorption_250d",2007-07-19,1.1102230246251565e-16,PASS
+features/clusters_market_adjusted_20d,2007-07-19,1.1102230246251565e-16,PASS
+features/connectedness_60d,2008-09-04,0.0,PASS
+"daily_panel avg_corr_60d, absorption_250d",2008-09-04,1.1102230246251565e-16,PASS
+features/clusters_market_adjusted_20d,2008-08-27,1.1102230246251565e-16,PASS
+features/connectedness_60d,2011-07-14,2.220446049250313e-16,PASS
+"daily_panel avg_corr_60d, absorption_250d",2011-07-14,0.0,PASS
+features/clusters_market_adjusted_20d,2011-07-07,3.3306690738754696e-16,PASS
+features/connectedness_60d,2020-02-06,3.3306690738754696e-16,PASS
+"daily_panel avg_corr_60d, absorption_250d",2020-02-06,1.1102230246251565e-16,PASS
+features/clusters_market_adjusted_20d,2020-02-06,1.1102230246251565e-15,PASS
+features/connectedness_60d,2022-02-14,3.885780586188048e-16,PASS
+"daily_panel avg_corr_60d, absorption_250d",2022-02-14,1.1102230246251565e-16,PASS
+features/clusters_market_adjusted_20d,2022-01-31,2.220446049250313e-16,PASS
+features/connectedness_60d,2025-03-12,1.6653345369377348e-16,PASS
+"daily_panel avg_corr_60d, absorption_250d",2025-03-12,1.1102230246251565e-16,PASS
+features/clusters_market_adjusted_20d,2025-03-12,1.1102230246251565e-16,PASS
