@@ -27,6 +27,9 @@ def _load_panel(name, func):
 
 render_alerts_panel, ALERTS_ERROR = _load_panel("alerts", "render_alerts_panel")
 
+# Add your loader here:
+render_network_panel, NETWORK_ERROR = _load_panel("network", "render_network_panel")
+
 # 1. Page Configuration
 st.set_page_config(
     page_title="Market Stress Early-Warning System", 
@@ -63,9 +66,11 @@ elif page == "Data & Alerts":
         render_alerts_panel()
 
 elif page == "Network & Clusters":
-    st.title("Network & Community Structure")
-    st.write("This panel will integrate Grace and Brandon's network and clustering data.")
-    st.info("Placeholder: 60-day rolling network visualizations, density, and modularity charts will go here.")
+        if render_network_panel is None:
+            st.error("The Network & Clusters panel could not load.")
+            st.code(NETWORK_ERROR)
+        else:
+            render_network_panel()
 
 elif page == "Sentiment Anomalies":
     st.title("SEC Filing Sentiment Anomalies")
