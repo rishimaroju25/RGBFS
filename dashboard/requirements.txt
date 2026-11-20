@@ -1,0 +1,10 @@
+# Dependencies for the deployed dashboard only (Streamlit Community Cloud).
+# Community Cloud uses this file instead of the root requirements.txt because it
+# sits next to the entrypoint (dashboard/app.py). It leaves out torch and
+# transformers (FinBERT), which the dashboard does not need and which are too
+# large for a free Community Cloud app.
+streamlit>=1.67.0
+plotly>=7.1.0
+pandas>=2.0
+numpy>=1.24
+pyarrow>=14.0

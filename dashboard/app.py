@@ -29,6 +29,7 @@ render_alerts_panel, ALERTS_ERROR = _load_panel("alerts", "render_alerts_panel")
 
 # Add your loader here:
 render_network_panel, NETWORK_ERROR = _load_panel("network", "render_network_panel")
+render_forecasts_panel, FORECASTS_ERROR = _load_panel("forecasts", "render_forecasts_panel")
 
 # 1. Page Configuration
 st.set_page_config(
@@ -78,6 +79,8 @@ elif page == "Sentiment Anomalies":
     st.info("Placeholder: Lead-time table and sentiment drop alerts will go here.")
 
 elif page == "Volatility Forecasts":
-    st.title("20-Day Volatility Forecasts")
-    st.write("This panel will display Grace's model comparison and Salah's walk-forward backtesting results.")
-    st.info("Placeholder: Model 1, Model 2, and Model 3 accuracy metrics and actual vs. predicted charts will go here.")
+    if render_forecasts_panel is None:
+        st.error("The Volatility Forecasts panel could not load. Send the text below to Salah.")
+        st.code(FORECASTS_ERROR)
+    else:
+        render_forecasts_panel()
