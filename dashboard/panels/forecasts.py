@@ -1,9 +1,9 @@
 """Volatility forecast panel (Week 7, Salah).
-
+ 
 Shows the latest 20-day volatility forecast, the walk-forward forecasts
 against what actually happened, and forecast accuracy overall, by year and
 in calm vs stress periods.
-
+ 
 Reads:
   notebooks/outputs/grace_week6/walk_forward_predictions.csv     forecasts by date (required)
   notebooks/outputs/grace_week6/model_comparison_results.csv     overall accuracy (optional)
@@ -11,21 +11,21 @@ Reads:
   notebooks/outputs/grace_week6/stress_period_performance.csv    calm vs stress accuracy (optional)
   docs/stress_periods.csv                                        labeled episodes (optional)
   data/processed/returns_market.parquet                          SPY returns, for today's forecast (optional)
-
+ 
 The required files are committed to GitHub, so the panel works on a deployed
 copy without the data folder. With the data folder it also shows a forecast
 for the latest trading day (HAR-style, refit on every matured target).
-
+ 
 Set RGBFS_DATA_ROOT to point at a different data folder (used for test runs).
 """
 import os
 from pathlib import Path
-
+ 
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-
+ 
 try:
     from dashboard.compat import full_width
 except ImportError:  # loaded by file path, or another "dashboard" package is installed
@@ -34,7 +34,7 @@ except ImportError:  # loaded by file path, or another "dashboard" package is in
     _compat = _ilu.module_from_spec(_spec)
     _spec.loader.exec_module(_compat)
     full_width = _compat.full_width
-
+ 
 ROOT = Path(os.environ.get("RGBFS_DATA_ROOT", Path(__file__).resolve().parents[2]))
 OUT = Path("notebooks") / "outputs" / "grace_week6"
 MODELS = ["Persistence", "HAR-style", "Volatility + clusters"]
@@ -42,13 +42,13 @@ VOL = ["vol_5", "vol_20", "vol_60"]
 COLORS = {"Persistence": "#1f77b4", "HAR-style": "#d62728", "Volatility + clusters": "#2ca02c"}
 STRESS_LEVEL = 0.25      # annualized volatility that defines a stress day (docs/stress_label_rule.md)
 HORIZON = 20
-
-
+ 
+ 
 def _read_csv(path, **kw):
     path = Path(path)
     return pd.read_csv(path, **kw) if path.exists() else None
-
-
+ 
+ 
 @st.cache_data(ttl=300)
 def load_data(root):
     root = Path(root)
@@ -66,11 +66,11 @@ def load_data(root):
             spy = pd.to_numeric(m["SPY_ret"], errors="coerce")
             spy.index = pd.to_datetime(spy.index)
     return pred, overall, annual, by_stress, episodes, spy
-
-
+ 
+ 
 def live_forecast(pred, spy):
     """HAR-style forecast for the latest trading day with SPY returns.
-
+ 
     Same features as Grace's notebooks (root mean squared SPY return over the last
     5, 20 and 60 days, annualized), refit by least squares on every forecast whose
     20-day target has already ended. Returns None if the inputs are missing.
@@ -91,8 +91,8 @@ def live_forecast(pred, spy):
     x = np.r_[1.0, feats.loc[day, VOL].to_numpy()]
     return {"date": day, "Persistence": float(feats.loc[day, "vol_20"]), "HAR-style": float(x @ coef),
             "train_n": len(train)}
-
-
+ 
+ 
 def _shade(fig, episodes, lo, hi):
     if episodes is None:
         return
@@ -100,12 +100,12 @@ def _shade(fig, episodes, lo, hi):
         if ep.end >= lo and ep.start <= hi:
             fig.add_vrect(x0=max(ep.start, lo), x1=min(ep.end, hi), fillcolor="red", opacity=0.12,
                           line_width=0, layer="below")
-
-
+ 
+ 
 def _status(v):
     return "above the stress level" if v >= STRESS_LEVEL else "below the stress level"
-
-
+ 
+ 
 def render_forecasts_panel(root=ROOT):
     st.header("20-day volatility forecasts")
     st.caption("Each forecast is made after the close and predicts annualized S&P 500 (SPY) volatility over the "
@@ -119,7 +119,7 @@ def render_forecasts_panel(root=ROOT):
     if pred.empty:
         st.warning("Forecast data is empty.")
         return
-
+ 
     # ---- latest forecast
     live = live_forecast(pred, spy)
     if live is not None:
@@ -141,7 +141,7 @@ def render_forecasts_panel(root=ROOT):
         cols[-1].metric(f"Actual, to {pred.loc[last, 'target_end']:%Y-%m-%d}", f"{pred.loc[last, 'target']:.1%}")
         st.caption("Today's forecast needs data/processed/returns_market.parquet (not on GitHub). "
                    "Backtest forecasts are shown only once their 20-day outcome is known.")
-
+ 
     # ---- forecast vs actual
     st.subheader("Forecasts vs what happened")
     lo_all, hi_all = pred.index.min().date(), pred.index.max().date()
@@ -156,7 +156,7 @@ def render_forecasts_panel(root=ROOT):
     d = pred.loc[lo:hi]
     fig = go.Figure()
     fig.add_scatter(x=d.index, y=d["target"], mode="lines", name="Actual (next 20 days)",
-                    line=dict(color="black", width=1.5))
+                    line=dict(color="#f5b800", width=2))
     for m in chosen:
         fig.add_scatter(x=d.index, y=d[m], mode="lines", name=m, line=dict(width=1, color=COLORS[m]))
     fig.add_hline(y=STRESS_LEVEL, line_dash="dash", line_color="gray", annotation_text="stress level")
@@ -164,9 +164,9 @@ def render_forecasts_panel(root=ROOT):
     fig.update_layout(height=430, margin=dict(t=30), yaxis=dict(title="Annualized volatility", tickformat=".0%"),
                       legend=dict(orientation="h", y=-0.15), hovermode="x unified")
     full_width(st.plotly_chart, fig)
-    st.caption("Plotted on the date each forecast was made: the black line is the volatility that then happened "
+    st.caption("Plotted on the date each forecast was made: the yellow line is the volatility that then happened "
                "over the next 20 trading days. Red shading marks labeled stress episodes.")
-
+ 
     # ---- accuracy
     st.subheader("Accuracy")
     if overall is not None:
@@ -188,6 +188,7 @@ def render_forecasts_panel(root=ROOT):
         st.markdown("**RMSE in calm vs stress periods**")
         full_width(st.dataframe, t.round(4))
         st.caption("All models miss by much more during stress, when volatility jumps faster than any of them expect.")
-
+ 
     st.download_button("Download forecasts CSV", pred.reset_index().to_csv(index=False),
                        "walk_forward_predictions.csv", "text/csv", key="forecast_download")
+ 
