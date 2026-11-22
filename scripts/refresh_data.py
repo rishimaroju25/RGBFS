@@ -15,7 +15,9 @@ Steps, in order (each uses the same code as the notebook that first built the fi
   labels    stress_labels_daily.parquet, stress_periods.csv            (stress_labels.ipynb)
   features  features/connectedness_60d, clusters_*, centrality_* (if src/centrality.py exists)
                                                                        (04, 08, 10_centrality notebooks)
-  --notebooks  re-runs 10_volatility_forecasting, 11_walk_forward_forecasting, 13, 14 and 15
+  sentiment new SEC filings for the 50 firms, FinBERT on new paragraphs only, sec_sentiment_* features
+                                                                       (scripts/build_sentiment.py)
+  --notebooks  re-runs 04_sentiment_full_corpus, 10_volatility_forecasting, 11_walk_forward_forecasting, 13, 14 and 15
             so the dashboard's forecast and alert outputs include the new days.
 
 Safety:
@@ -54,8 +56,9 @@ from src import windows as wn  # noqa: E402
 
 PROC = ROOT / "data" / "processed"
 FEATURES = PROC / "features"
-STEPS = ["prices", "panel", "returns", "labels", "features"]
+STEPS = ["prices", "panel", "returns", "labels", "features", "sentiment"]
 NOTEBOOKS = [
+    "notebooks/04_sentiment_full_corpus.ipynb",
     "notebooks/10_volatility_forecasting.ipynb",
     "notebooks/11_walk_forward_forecasting.ipynb",
     "notebooks/13_anomaly_detection.ipynb",
@@ -135,11 +138,32 @@ def refresh_labels():
           f"{len(episodes)} episodes" + (f" ({unnamed} new, add a name in src/stress_labels.py)" if unnamed else ""))
 
 
+def network_features(rets, window=60, threshold=0.55, freq="W"):
+    """Brandon's weekly network table (notebook 05, Issue 7): density of the graph with an
+    edge where the 60-day correlation is above 0.55 (all stocks counted), and the average
+    pairwise correlation. Same calculation without networkx (density = share of pairs linked)."""
+    import numpy as np
+
+    rows = []
+    for d in rets.resample(freq).last().dropna(how="all").index:
+        if len(rets.loc[:d]) < window:
+            continue
+        c = wn.correlation_at(rets, end=d, window=window).to_numpy()
+        iu = np.triu_indices(len(c), k=1)
+        rows.append({"date": d, "network_density": float((c[iu] > threshold).mean()),
+                     "avg_correlation": float(c[iu].mean())})
+    return pd.DataFrame(rows).set_index("date")
+
+
 def refresh_features(rets):
     FEATURES.mkdir(parents=True, exist_ok=True)
     conn = wn.connectedness(rets)
     conn.to_parquet(FEATURES / "connectedness_60d.parquet")
     print(f"connectedness_60d: last window {conn.index.max().date()}")
+
+    net = network_features(rets)
+    net.to_parquet(PROC / "network_features.parquet")
+    print(f"network_features: last week {net.index.max().date()}")
 
     sec = pd.read_csv(ROOT / "docs" / "sector_mapping.csv")
     sectors = sec.dropna(subset=["sector"]).set_index("ticker")["sector"].to_dict()
@@ -157,6 +181,20 @@ def refresh_features(rets):
     cent.to_parquet(FEATURES / "centrality_60d.parquet")
     hubs.to_parquet(FEATURES / "centrality_hubs_60d.parquet", index=False)
     print(f"centrality: last window {cent.index.max().date()}")
+
+
+def refresh_sentiment(end):
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("build_sentiment", ROOT / "scripts" / "build_sentiment.py")
+    bs = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bs)
+    try:
+        bs.main(["--end", end] if end else [])
+    except RuntimeError as exc:          # no SEC_USER_AGENT in .env
+        print(f"sentiment: skipped ({exc})")
+    except ImportError as exc:           # transformers or torch missing
+        print(f"sentiment: skipped, install transformers and torch first ({exc})")
 
 
 def run_notebooks():
@@ -208,10 +246,18 @@ def main():
     if "features" in args.steps:
         step("features")
         refresh_features(rets if rets is not None else rt.load_returns())
+    if "sentiment" in args.steps:
+        step("sentiment (SEC filings, FinBERT)")
+        refresh_sentiment(args.end)
     if args.notebooks:
         step("notebooks")
         run_notebooks()
-    print("\nDone. Send the new data/processed folder to Rishi for the shared Drive.")
+    snap = ROOT / "scripts" / "update_dashboard_snapshot.py"
+    if snap.exists():
+        step("dashboard snapshot")
+        import runpy
+        runpy.run_path(str(snap), run_name="__main__")
+    print("\nDone. Push the notebook outputs and dashboard/snapshot, and send data/processed to Rishi for the shared Drive.")
 
 
 if __name__ == "__main__":
