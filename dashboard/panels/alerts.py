@@ -22,13 +22,14 @@ import plotly.graph_objects as go
 import streamlit as st
 
 try:
-    from dashboard.compat import full_width
+    from dashboard.compat import data_file, full_width
 except ImportError:  # loaded by file path, or another "dashboard" package is installed
     import importlib.util as _ilu
     _spec = _ilu.spec_from_file_location("rgbfs_compat", Path(__file__).resolve().parents[1] / "compat.py")
     _compat = _ilu.module_from_spec(_spec)
     _spec.loader.exec_module(_compat)
     full_width = _compat.full_width
+    data_file = _compat.data_file
 
 ROOT = Path(os.environ.get("RGBFS_DATA_ROOT", Path(__file__).resolve().parents[2]))
 NETWORK = "Network anomaly (combined)"
@@ -52,10 +53,10 @@ def load_data(root):
     leads = {col: pd.read_csv(out / f"lead_times_by_episode_{col}.csv", dtype=str).fillna("")
              for col in ["start", "start_trailing"]}
     episodes = pd.read_csv(root / "docs" / "stress_periods.csv", parse_dates=["start", "end", "start_trailing"])
-    anom = _read_optional_parquet(root / "data/processed/features/anomaly_network_daily.parquet",
+    anom = _read_optional_parquet(data_file(root, "features/anomaly_network_daily.parquet"),
                                   ["z_composite", "if_score", "alert", "asof"])
-    vix = _read_optional_parquet(root / "data/processed/daily_panel.parquet", ["VIXCLS"])
-    market = _read_optional_parquet(root / "data/processed/returns_market.parquet", ["n_returns"])
+    vix = _read_optional_parquet(data_file(root, "daily_panel.parquet"), ["VIXCLS"])
+    market = _read_optional_parquet(data_file(root, "returns_market.parquet"), ["n_returns"])
     return signals, summary, leads, episodes, anom, vix, market
 
 

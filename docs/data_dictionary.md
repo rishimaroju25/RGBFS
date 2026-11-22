@@ -57,7 +57,7 @@ Why simple returns: the cross-sectional measures (correlation, dispersion) are n
 | `windows(returns, window=60, step=5)` | Yields each trailing window (end date, start date, block of returns) |
 | `correlation_at(returns, date, window=60)` | Stocks x stocks correlation matrix for one window (network prototype) |
 | `rolling_apply(returns, func, window, step)` | Runs any `func(block) -> dict` on every window; one row per end date |
-| `connectedness(returns, window, step)` | `avg_corr`, `pc1_share`, `absorption`, `n_stocks` per window |
+| `connectedness(returns, window, step)` | `avg_corr`, `pc1_share`, `absorption`, `n_stocks` per window. `absorption` = share of variance in the top fifth of the window's non-zero eigenvalues (about 12 of 59 for 60 days); before 2026-11-21 it used a fifth of the stocks and was stuck near 1.0 |
 
 Rules: windows are **trailing** (a value dated *t* uses days up to *t* only); a stock is used only if it has a return on **every** day of the window (so stocks entering or leaving the index mid-window are excluded); windows with fewer than 100 such stocks are skipped. The tests in `tests/test_returns_windows.py` check that changing future returns never changes past feature values.
 

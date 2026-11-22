@@ -27,13 +27,14 @@ import plotly.graph_objects as go
 import streamlit as st
  
 try:
-    from dashboard.compat import full_width
+    from dashboard.compat import data_file, full_width
 except ImportError:  # loaded by file path, or another "dashboard" package is installed
     import importlib.util as _ilu
     _spec = _ilu.spec_from_file_location("rgbfs_compat", Path(__file__).resolve().parents[1] / "compat.py")
     _compat = _ilu.module_from_spec(_spec)
     _spec.loader.exec_module(_compat)
     full_width = _compat.full_width
+    data_file = _compat.data_file
  
 ROOT = Path(os.environ.get("RGBFS_DATA_ROOT", Path(__file__).resolve().parents[2]))
 OUT = Path("notebooks") / "outputs" / "grace_week6"
@@ -58,7 +59,7 @@ def load_data(root):
     annual = _read_csv(root / OUT / "annual_model_performance.csv")
     by_stress = _read_csv(root / OUT / "stress_period_performance.csv")
     episodes = _read_csv(root / "docs" / "stress_periods.csv", parse_dates=["start", "end"])
-    market_path = root / "data" / "processed" / "returns_market.parquet"
+    market_path = data_file(root, "returns_market.parquet")
     spy = None
     if market_path.exists():
         m = pd.read_parquet(market_path)

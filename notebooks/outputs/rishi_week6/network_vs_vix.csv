@@ -1,12 +1,12 @@
 episode,vs VIX z >= 2 (start),vs VIX > 25 (start),vs VIX z >= 2 (start_trailing),vs VIX > 25 (start_trailing)
-Aug 2007 credit and quant-fund stress,-1.0,26.0,-1.0,26.0
+Aug 2007 credit and quant-fund stress,-21.0,6.0,-21.0,6.0
 Bear Stearns,-40.0,-49.0,-50.0,-59.0
-Global financial crisis (Lehman),-1.0,-52.0,-3.0,-54.0
-Flash crash and first euro-area debt stress,-3.0,-66.0,-5.0,-5.0
-"U.S. debt ceiling, S&P downgrade and euro-area debt crisis",0.0,-4.0,0.0,-4.0
+Global financial crisis (Lehman),32.0,-19.0,32.0,-19.0
+Flash crash and first euro-area debt stress,0.0,-63.0,0.0,0.0
+"U.S. debt ceiling, S&P downgrade and euro-area debt crisis",15.0,11.0,15.0,11.0
 China devaluation selloff,-2.0,-2.0,-2.0,-2.0
 Feb 2018 volatility spike,-4.0,1.0,-4.0,1.0
-Q4 2018 selloff,-53.0,-43.0,-62.0,-52.0
+Q4 2018 selloff,-12.0,-2.0,-12.0,-2.0
 COVID-19 crash,-4.0,-4.0,-4.0,-4.0
 Russia's invasion of Ukraine,-9.0,-9.0,28.0,27.0
 2022 rate-hike bear market (first leg),-3.0,-3.0,-3.0,-3.0

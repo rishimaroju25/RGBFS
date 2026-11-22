@@ -1,12 +1,12 @@
 episode_id,name,start,window_start,first_alert,lead_days,already_on,has_data,result
-1,Aug 2007 credit and quant-fund stress,2007-08-03,2007-05-09,2007-06-27,26.0,False,True,early
+1,Aug 2007 credit and quant-fund stress,2007-08-03,2007-05-09,2007-07-26,6.0,False,True,early
 2,Bear Stearns,2008-03-04,2007-12-05,,,False,True,missed
-3,Global financial crisis (Lehman),2008-08-29,2008-06-05,,,False,True,missed
-4,Flash crash and first euro-area debt stress,2010-04-26,2010-01-28,,,False,True,missed
-5,"U.S. debt ceiling, S&P downgrade and euro-area debt crisis",2011-07-25,2011-04-28,2011-08-04,-8.0,False,True,late
+3,Global financial crisis (Lehman),2008-08-29,2008-06-05,2008-07-30,22.0,False,True,early
+4,Flash crash and first euro-area debt stress,2010-04-26,2010-01-28,2010-05-06,-8.0,False,True,late
+5,"U.S. debt ceiling, S&P downgrade and euro-area debt crisis",2011-07-25,2011-04-28,2011-07-14,7.0,False,True,early
 6,China devaluation selloff,2015-08-12,2015-05-18,2015-08-25,-9.0,False,True,late
 7,Feb 2018 volatility spike,2018-02-01,2017-11-03,2018-02-02,-1.0,False,True,late
-8,Q4 2018 selloff,2018-12-11,2018-09-14,,,False,True,missed
+8,Q4 2018 selloff,2018-12-11,2018-09-14,2018-10-26,30.0,False,True,early
 9,COVID-19 crash,2020-02-14,2019-11-18,2020-02-28,-9.0,False,True,late
 10,Russia's invasion of Ukraine,2022-02-23,2021-11-26,2021-12-09,51.0,False,True,early
 11,2022 rate-hike bear market (first leg),2022-04-20,2022-03-10,2022-03-15,25.0,False,True,early

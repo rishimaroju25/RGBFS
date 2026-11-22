@@ -133,7 +133,7 @@ def detect(feat: pd.DataFrame, base_cols=BASE_METRICS, directions: dict = DIRECT
       if_flag_stress    Isolation Forest flag kept only when z_composite > 0
       alert             1 if z_flag or if_flag_stress, NaN during warm-up
     """
-    feat = add_changes(feat[list(base_cols)].astype(float))
+    feat = add_changes(feat[list(base_cols)].astype(float), cols=[c for c in CHANGE_METRICS if c in base_cols])
     z = trailing_zscores(feat, lookback, min_periods)
     zs = zscore_flags(z, directions, z_threshold)
     iso = walk_forward_iforest(z.dropna(), **(if_kwargs or {}))

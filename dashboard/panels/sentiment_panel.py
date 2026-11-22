@@ -1,16 +1,24 @@
+"""SEC filing sentiment panel (Week 7, Fatima).
 
+Reads data/processed/features/sec_sentiment_daily.parquet (notebook
+04_sentiment_full_corpus), falling back to the committed copy in dashboard/snapshot/.
+"""
 import streamlit as st
 import pandas as pd
 from pathlib import Path
 
-# Location of the sentiment dataset
-DATA_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "data"
-    / "processed"
-    / "features"
-    / "sec_sentiment_daily.parquet"
-)
+try:
+    from dashboard.compat import data_file, full_width
+except ImportError:  # loaded by file path, or another "dashboard" package is installed
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("rgbfs_compat", Path(__file__).resolve().parents[1] / "compat.py")
+    _compat = _ilu.module_from_spec(_spec)
+    _spec.loader.exec_module(_compat)
+    full_width = _compat.full_width
+    data_file = _compat.data_file
+
+# Location of the sentiment dataset (local data folder first, then the dashboard snapshot)
+DATA_PATH = data_file(Path(__file__).resolve().parents[2], "features/sec_sentiment_daily.parquet")
 
 
 @st.cache_data
@@ -78,7 +86,7 @@ def show_sentiment_panel():
         ]
 
     st.write("Matching Records:", len(filtered_df))
-    st.dataframe(filtered_df, use_container_width=True)
+    full_width(st.dataframe, filtered_df, hide_index=True)
 
 
     # Average sentiment over time

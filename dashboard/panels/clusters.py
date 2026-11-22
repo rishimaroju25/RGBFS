@@ -3,13 +3,14 @@ import pandas as pd
 import streamlit as st
 
 try:
-    from dashboard.compat import full_width
+    from dashboard.compat import data_file, full_width
 except ImportError:  # loaded by file path, or another "dashboard" package is installed
     import importlib.util as _ilu
     _spec = _ilu.spec_from_file_location("rgbfs_compat", Path(__file__).resolve().parents[1] / "compat.py")
     _compat = _ilu.module_from_spec(_spec)
     _spec.loader.exec_module(_compat)
     full_width = _compat.full_width
+    data_file = _compat.data_file
 import plotly.express as px
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -17,16 +18,16 @@ ROOT = Path(__file__).resolve().parents[2]
 @st.cache_data(ttl=300)
 def load_data(root):
     base = Path(root) / 'data' / 'processed'
-    metrics = pd.read_parquet(base / 'features/clusters_market_adjusted_20d.parquet').reset_index()
+    metrics = pd.read_parquet(data_file(root, 'features/clusters_market_adjusted_20d.parquet')).reset_index()
     metrics = metrics.rename(columns={metrics.columns[0]: 'date'})
-    members = pd.read_parquet(base / 'features/cluster_memberships_market_adjusted_20d.parquet')
+    members = pd.read_parquet(data_file(root, 'features/cluster_memberships_market_adjusted_20d.parquet'))
     for frame in (metrics, members):
         frame['date'] = pd.to_datetime(frame['date']).dt.normalize()
     mapping_path = base / 'sector_mapping.csv'
     if not mapping_path.exists():  # shared copy in the repo (scripts/build_sector_mapping.py)
         mapping_path = Path(root) / 'docs' / 'sector_mapping.csv'
     mapping = pd.read_csv(mapping_path) if mapping_path.exists() else None
-    stress_path = base / 'stress_labels_daily.parquet'
+    stress_path = data_file(root, 'stress_labels_daily.parquet')
     stress = pd.read_parquet(stress_path) if stress_path.exists() else None
     if stress is not None:
         stress.index = pd.to_datetime(stress.index).normalize()

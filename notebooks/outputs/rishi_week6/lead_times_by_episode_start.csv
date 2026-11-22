@@ -1,14 +1,14 @@
 episode,start,Network anomaly (combined),Network z-score only,VIX > 25,VIX z >= 2,STLFSI4 > 0 (lagged),STLFSI4 > 1 (lagged),Model alert (+ z + IF),Baseline model alert (VIX + vol)
-Aug 2007 credit and quant-fund stress,2007-08-03,26,26,0,27,-4,missed,,
+Aug 2007 credit and quant-fund stress,2007-08-03,6,6,0,27,-4,missed,,
 Bear Stearns,2008-03-04,missed,missed,38,29,60*,60*,,
-Global financial crisis (Lehman),2008-08-29,missed,missed,41,-10,60*,55,,
-Flash crash and first euro-area debt stress,2010-04-26,missed,missed,55,-8,55,missed,,
-"U.S. debt ceiling, S&P downgrade and euro-area debt crisis",2011-07-25,-8,-8,-4,-8,2,missed,60*,missed
-China devaluation selloff,2015-08-12,-9,-9,-7,-7,23,missed,missed,missed
+Global financial crisis (Lehman),2008-08-29,22,22,41,-10,60*,55,,
+Flash crash and first euro-area debt stress,2010-04-26,-8,-8,55,-8,55,missed,,
+"U.S. debt ceiling, S&P downgrade and euro-area debt crisis",2011-07-25,7,7,-4,-8,2,missed,60*,missed
+China devaluation selloff,2015-08-12,-9,-9,-7,-7,23,missed,16,missed
 Feb 2018 volatility spike,2018-02-01,-1,-1,-2,3,-10,missed,60*,missed
-Q4 2018 selloff,2018-12-11,missed,missed,32,42,7,missed,60*,22
-COVID-19 crash,2020-02-14,-9,-9,-5,-5,missed,missed,6,missed
-Russia's invasion of Ukraine,2022-02-23,51,51,60,60,-6,missed,43,43
+Q4 2018 selloff,2018-12-11,30,30,32,42,7,missed,27,22
+COVID-19 crash,2020-02-14,-9,-9,-5,-5,missed,missed,missed,missed
+Russia's invasion of Ukraine,2022-02-23,51,51,60,60,-6,missed,missed,43
 2022 rate-hike bear market (first leg),2022-04-20,25,25,28*,28*,28*,missed,missed,28
 2022 rate-hike bear market (second leg),2022-09-19,56*,56*,56*,missed,56*,missed,missed,56
-Spring 2025 tariff selloff,2025-03-20,51,51,8,60*,missed,missed,60*,4
+Spring 2025 tariff selloff,2025-03-20,51,51,8,60*,missed,missed,36,4
