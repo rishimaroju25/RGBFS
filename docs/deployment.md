@@ -25,15 +25,17 @@ Community Cloud installs `dashboard/requirements.txt` (it takes precedence over 
 
 ## What works without the data folder
 
-`data/` is never on GitHub, so the deployed app only sees committed files.
+`data/` is never on GitHub. The dashboard falls back to a small committed snapshot in `dashboard/snapshot/` (about 0.8 MB, team data through 2026-10-28; see its README), so every page works on the deployed app and for teammates without the Drive data. When `data/processed/` exists locally, it is used instead.
 
-| Panel | On the deployed app |
+| Panel | Reads |
 |---|---|
-| Volatility forecasts | Works: reads `notebooks/outputs/grace_week6/`. Shows the latest backtest forecast; today's forecast needs `returns_market.parquet` |
-| Data & alerts | Works: reads `notebooks/outputs/rishi_week6/`; VIX and anomaly lines are hidden |
-| Network & clusters | Needs `data/processed/features/clusters_market_adjusted_20d.parquet`: shows a warning until the team decides how to ship it (see below) |
+| Overview | `notebooks/outputs/` summary tables |
+| Data & alerts | `notebooks/outputs/rishi_week6/`, plus snapshot anomaly scores, VIX and coverage |
+| Network & clusters | snapshot `network_features.parquet`, `connectedness_60d.parquet`, cluster files |
+| Sentiment | snapshot `sec_sentiment_daily.parquet` |
+| Volatility forecasts | `notebooks/outputs/grace_week6/`, snapshot `returns_market.parquet` |
 
-**Team decision needed:** the cluster panel needs about 2 MB of feature files. Options: commit a small snapshot (for example `dashboard/snapshot/`) and let the panel fall back to it, or show the panel only when running locally.
+After a data refresh, run `python scripts/update_dashboard_snapshot.py` and push, so the deployed app shows the new days.
 
 ## Test on another computer (checklist)
 

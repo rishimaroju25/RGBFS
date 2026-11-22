@@ -116,16 +116,21 @@ def connectedness_metrics(block: pd.DataFrame, ar_share: float = 0.2) -> dict:
     avg_corr:   mean pairwise correlation
     pc1_share:  largest eigenvalue of the correlation matrix / number of stocks
     absorption: share of total variance explained by the top `ar_share` of
-                the covariance matrix's eigenvectors (Kritzman et al., 2011 use
-                about one fifth of the assets; this version uses plain, not
-                exponentially weighted, covariance)
+                the covariance matrix's non-zero eigenvalues (Kritzman et al.,
+                2011 use about one fifth of the assets with a long window; this
+                version uses plain, not exponentially weighted, covariance).
+                A 60-day window has at most 59 non-zero eigenvalues while there
+                are about 400 stocks, so "one fifth of the assets" (about 80)
+                would always explain 100% of the variance. One fifth of the
+                window's rank (about 12 components) keeps the measure informative.
     """
     x = block.to_numpy()
     c = np.corrcoef(x, rowvar=False)
     n = c.shape[0]
     eig_c = np.linalg.eigvalsh(c)[::-1]
     eig_v = np.linalg.eigvalsh(np.cov(x, rowvar=False))[::-1]
-    k = max(1, int(round(n * ar_share)))
+    rank = min(n, x.shape[0] - 1)
+    k = max(1, int(round(rank * ar_share)))
     return {
         "avg_corr": (c.sum() - n) / (n * (n - 1)),
         "pc1_share": eig_c[0] / n,

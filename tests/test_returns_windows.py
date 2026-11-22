@@ -151,3 +151,17 @@ def test_multi_day_crisis_swing_is_kept():
     res = run(frame(A=px), members(["A"]))
     assert res.returns["A"].iloc[3:6].notna().all()
     assert res.summary["spike_removed"] == 0
+
+
+def test_absorption_not_saturated_when_window_shorter_than_stocks():
+    """60 days of 300 stocks: absorption must stay below 1 and rise with a common factor."""
+    import numpy as np
+    import pandas as pd
+    from src.windows import connectedness_metrics
+    rng = np.random.default_rng(0)
+    idio = rng.normal(size=(60, 300))
+    calm = connectedness_metrics(pd.DataFrame(idio))
+    factor = rng.normal(size=(60, 1))
+    stressed = connectedness_metrics(pd.DataFrame(idio + 2 * factor))
+    assert calm["absorption"] < 0.6
+    assert stressed["absorption"] > calm["absorption"] + 0.2

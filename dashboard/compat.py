@@ -14,3 +14,23 @@ def full_width(element, *args, **kwargs):
         return element(*args, width="stretch", **kwargs)
     except (TypeError, ValueError, st.errors.StreamlitAPIException):
         return element(*args, use_container_width=True, **kwargs)
+
+
+from pathlib import Path as _Path
+
+SNAPSHOT = _Path(__file__).resolve().parent / "snapshot"
+
+
+def data_file(root, rel):
+    """Path to data/processed/<rel>, or to the committed copy in dashboard/snapshot/.
+
+    The local data folder wins when it exists, so a refreshed `data/` is always
+    shown. The snapshot keeps the panels working on Streamlit Community Cloud
+    and on computers without the shared data. Returns the data/processed path
+    (which may not exist) if neither is found.
+    """
+    local = _Path(root) / "data" / "processed" / rel
+    if local.exists():
+        return local
+    snap = SNAPSHOT / _Path(rel).name
+    return snap if snap.exists() else local
