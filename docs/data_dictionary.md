@@ -1,12 +1,12 @@
 # Data dictionary
 
-**Owner:** Rishi (data pipeline) · **Last updated:** Week 2
+**Owner:** Rishi (data pipeline) · **Last updated:** Week 8
 
 Everything under `data/` is created by code and is not committed to GitHub (it is too large). Run the steps in **How to rebuild** below, or copy the team's shared `data/processed/` folder from Google Drive.
 
 ## How to rebuild
 
-From the repo root, in this order:
+Easiest: `python scripts/refresh_data.py --refresh-membership --notebooks` runs every step below (prices, FRED, labels, features, network features, SEC sentiment, notebooks, dashboard snapshot). The SEC step needs `SEC_USER_AGENT` in `.env` and is skipped with a message if it is missing. Or by hand, from the repo root, in this order:
 
 | Step | Command | Creates |
 |---|---|---|
@@ -18,6 +18,8 @@ From the repo root, in this order:
 | 6 | run `notebooks/13_anomaly_detection.ipynb` (after step 4) | `features/anomaly_network_daily.parquet`, `notebooks/outputs/rishi_week4/` |
 | 7 | run `notebooks/14_anomaly_flags_in_models.ipynb` | `notebooks/outputs/rishi_week5/` |
 | 8 | run `notebooks/15_alert_lead_time.ipynb` | `notebooks/outputs/rishi_week6/` (read by the dashboard alerts panel) |
+| 9 | `python scripts/build_sentiment.py` then run `notebooks/04_sentiment_full_corpus.ipynb` | `data/processed/sec/*_full*`, `features/sec_sentiment_*` (run before steps 7 and 8 so they include sentiment) |
+| 10 | `python scripts/update_dashboard_snapshot.py` | `dashboard/snapshot/` (small copies the dashboard falls back to) |
 
 **Keep `data/raw/prices/`.** Yahoo drops a symbol's history after a company is acquired or delisted (8 tickers already lost theirs, see `survivorship_bias.md`), so a fresh download later can permanently lose stocks.
 
@@ -101,15 +103,26 @@ The stress labels are only used to score alerts, never as inputs.
 | `stress_labels_daily.parquet` | `vol_centered`, `stress_day_raw`, `episode_id`, `stress` (1 inside an episode). **Uses future data by design: evaluation target only, never a feature** |
 | `docs/stress_periods.csv` | One row per episode: start (centered), start_trailing, end, peak volatility, drawdown, name |
 
-## Text (`src/sec_filings.py`)
+## Text (`src/sec_filings.py`, `src/sentiment.py`)
+
+Original 2022 sample (5 tech firms): `sec/filings.csv`, `sec/paragraphs.parquet` (ticker, form, filing_date, accession, paragraph_id, section, text).
+
+Full corpus (Week 8): 50 large S&P 500 companies, all 11 sectors (list in `src/sentiment.py`, every one a member for all of 2006 to 2026), every 10-K and 10-Q from 2006. Built by `scripts/build_sentiment.py` (incremental: only new filings are downloaded, and FinBERT scores are cached, so reruns are fast). Same rules as Fatima's notebook: MD&A (10-K Item 7, 10-Q Item 2) and Risk Factors (Item 1A); paragraphs of 15+ words; a Risk Factors paragraph is dropped if it is at least 90% similar to one in the company's previous 4 filings (repeats carry no news); ProsusAI/finbert labels each paragraph (+1 positive, 0 neutral, -1 negative).
 
 | File | Contents |
 |---|---|
-| `sec/filings.csv` | One row per filing: ticker, CIK, form, filing date, accession, document |
-| `sec/paragraphs.parquet` | One row per cleaned paragraph: ticker, form, filing_date, accession, paragraph_id, section (Item 1A, Item 7, ...), text |
+| `sec/paragraphs_full.parquet` | Cleaned paragraphs, all firms and years |
+| `sec/filings_full.csv`, `sec/problems_full.csv`, `sec/coverage_full.csv` | Filings found, filings that failed to parse, and filings per company per year (check for gaps) |
+| `sec/finbert_cache.parquet` | FinBERT label and confidence per unique paragraph text (sha1 key) |
+| `features/sec_sentiment_scored.parquet` | One row per scored paragraph |
+| `features/sec_sentiment_filings.parquet` | One row per filing and section: paragraphs, average_sentiment, negative_share, tone_change (vs the previous filing of the same form) |
+| `features/sec_sentiment_daily.parquet` | Per company, section and trading day: latest filing's values, used from the trading day **after** the filing (shifted 1 more day) |
+| `features/sec_sentiment_market_daily.parquet` | Per trading day: `mdna_sentiment`, `mdna_tone_change`, `mdna_negative_share`, `risk_*` (same for new Risk Factors paragraphs), `*_firms` (companies counted). Average over companies whose latest filing is under 130 trading days old. Used by notebooks 14 and 15 |
+
+`features/network_features.parquet` (Brandon's weekly network density and related features) is rebuilt by `scripts/refresh_data.py` so it stays current.
 
 ## Known gaps
 
 * About 23% of member-days have no price (62% coverage in 2008, 92% in 2022), mostly firms that failed or were acquired. Stress in 2008 is likely understated. Details in `survivorship_bias.md`.
 * Failed firms' final "delisting" return is never in Yahoo data.
-* Text covers 5 technology firms in 2022 so far.
+* Text covers 50 companies, not the whole index. GOOGL and DIS changed CIK during the sample (predecessor CIKs are added in `src/sentiment.py`); check `coverage_full.csv` for missing years.

@@ -15,7 +15,10 @@ FILES = [
     "features/clusters_market_adjusted_20d.parquet",
     "features/cluster_memberships_market_adjusted_20d.parquet",
     "features/anomaly_network_daily.parquet",
-    "features/sec_sentiment_daily.parquet",
+    "features/sec_sentiment_filings.parquet",
+    "features/sec_sentiment_market_daily.parquet",
+    "features/connectedness_60d.parquet",
+    "network_features.parquet",
     "returns_market.parquet",
     "stress_labels_daily.parquet",
 ]
