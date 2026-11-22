@@ -4,3 +4,5 @@ __pycache__/
 .ipynb_checkpoints/
 # week 3 generated clustering datasets
 notebooks/outputs/grace_weeks/*.csv
+# Grace weekly CSV outputs are stored in Google Drive
+/notebooks/outputs/grace_week*/*.csv
