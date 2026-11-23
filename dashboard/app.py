@@ -59,6 +59,8 @@ if page == "Overview":
 
     def _csv(rel, **kw):
         path = OUTS / rel
+        if not path.exists():  # e.g. Grace's CSVs moved to Drive: use the committed snapshot copy
+            path = Path(__file__).resolve().parent / "snapshot" / Path(rel).name
         return pd.read_csv(path, **kw) if path.exists() else None
 
     st.subheader("Current status")
