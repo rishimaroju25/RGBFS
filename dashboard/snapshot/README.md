@@ -18,6 +18,7 @@ copy here (see `data_file()` in `dashboard/compat.py`).
 | `connectedness_60d.parquet`, `network_features.parquet` | notebook 04, `scripts/refresh_data.py` | Network & Clusters |
 | `returns_market.parquet` | `src/returns.py` (notebook 04) | Data & Alerts, Volatility Forecasts |
 | `stress_labels_daily.parquet` | `src/stress_labels.py` | Network & Clusters |
+| `walk_forward_predictions.csv`, `model_comparison_results.csv`, `annual_model_performance.csv`, `stress_period_performance.csv` | Grace's notebook 11 (Week 6); her CSV outputs now live on the shared Drive | Volatility Forecasts, notebooks 14 and 17 |
 | `daily_panel.parquet` | `src/data_loading.py`, **VIXCLS and STLFSI4 columns only** | Data & Alerts |
 
 Snapshot of the team data through 2026-10-28 (sentiment: 2022 sample until the 50-firm build is run). After

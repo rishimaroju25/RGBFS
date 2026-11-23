@@ -48,16 +48,26 @@ HORIZON = 20
 def _read_csv(path, **kw):
     path = Path(path)
     return pd.read_csv(path, **kw) if path.exists() else None
+
+
+def _output(root, name):
+    """notebooks/outputs/grace_week6/<name>, or the committed copy in dashboard/snapshot/.
+
+    Grace's CSV outputs moved to the shared Drive (2026-11-22), so the snapshot
+    copy keeps this panel working on Streamlit Cloud and fresh clones.
+    """
+    local = Path(root) / OUT / name
+    return local if local.exists() else Path(__file__).resolve().parents[1] / "snapshot" / name
  
  
 @st.cache_data(ttl=300)
 def load_data(root):
     root = Path(root)
-    pred = pd.read_csv(root / OUT / "walk_forward_predictions.csv", parse_dates=["date", "target_end"])
+    pred = pd.read_csv(_output(root, "walk_forward_predictions.csv"), parse_dates=["date", "target_end"])
     pred = pred.set_index("date").sort_index()
-    overall = _read_csv(root / OUT / "model_comparison_results.csv")
-    annual = _read_csv(root / OUT / "annual_model_performance.csv")
-    by_stress = _read_csv(root / OUT / "stress_period_performance.csv")
+    overall = _read_csv(_output(root, "model_comparison_results.csv"))
+    annual = _read_csv(_output(root, "annual_model_performance.csv"))
+    by_stress = _read_csv(_output(root, "stress_period_performance.csv"))
     episodes = _read_csv(root / "docs" / "stress_periods.csv", parse_dates=["start", "end"])
     market_path = data_file(root, "returns_market.parquet")
     spy = None
