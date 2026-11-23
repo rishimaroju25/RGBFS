@@ -70,6 +70,7 @@ FIRMS = {
 PREDECESSOR_CIKS = {
     "GOOGL": [1288776],   # Google Inc., before the 2015 Alphabet holding company
     "DIS": [1001039],     # The Walt Disney Company before the 2019 Fox deal holding company
+    "XOM": [34088],       # Exxon Mobil Corp; the SEC ticker file now points XOM at a new CIK (2115436) with only recent filings
 }
 
 
